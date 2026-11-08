@@ -1,0 +1,65 @@
+[
+  {
+    "name": "embla-carousel",
+    "version": "8.6.0",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel/-/embla-carousel-8.6.0.tgz",
+    "integrity": "sha512-SjWyZBHJPbqxHOzckOfo8lHisEaJWmwd23XppYFYVh10bU66/Pn5tkVkbkCMZVdbUE5eTCI2nD8OyIP4Z+uwkA==",
+    "file": "embla-carousel/embla-carousel.umd.js",
+    "sha256": "f05b5dbfe37d79b636b9db74ad04ed5e99b4bce369d781b0fb38b0b2ac619e66"
+  },
+  {
+    "name": "embla-carousel-autoplay",
+    "version": "8.6.0",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel-autoplay/-/embla-carousel-autoplay-8.6.0.tgz",
+    "integrity": "sha512-OBu5G3nwaSXkZCo1A6LTaFMZ8EpkYbwIaH+bPqdBnDGQ2fh4+NbzjXjs2SktoPNKCtflfVMc75njaDHOYXcrsA==",
+    "file": "embla-carousel-autoplay/embla-carousel-autoplay.umd.js",
+    "sha256": "f92de17882497c13f360a2ee11ce3d87e2e48e73369b44bfcf1b2444ef591948"
+  },
+  {
+    "name": "embla-carousel-auto-scroll",
+    "version": "8.6.0",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel-auto-scroll/-/embla-carousel-auto-scroll-8.6.0.tgz",
+    "integrity": "sha512-WT9fWhNXFpbQ6kP+aS07oF5IHYLZ1Dx4DkwgCY8Hv2ZyYd2KMCPfMV1q/cA3wFGuLO7GMgKiySLX90/pQkcOdQ==",
+    "file": "embla-carousel-auto-scroll/embla-carousel-auto-scroll.umd.js",
+    "sha256": "1dc04a4b1df212c036572aaca908fd255c86cfb3d05b6cab29a10415c3d588e4"
+  },
+  {
+    "name": "embla-carousel-auto-height",
+    "version": "8.6.0",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel-auto-height/-/embla-carousel-auto-height-8.6.0.tgz",
+    "integrity": "sha512-/HrJQOEM6aol/oF33gd2QlINcXy3e19fJWvHDuHWp2bpyTa+2dm9tVVJak30m2Qy6QyQ6Fc8DkImtv7pxWOJUQ==",
+    "file": "embla-carousel-auto-height/embla-carousel-auto-height.umd.js",
+    "sha256": "1902253773e02b3b5ae283cc697048d52fe3c98326a0d52e292a834b93657150"
+  },
+  {
+    "name": "embla-carousel-class-names",
+    "version": "8.6.0",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel-class-names/-/embla-carousel-class-names-8.6.0.tgz",
+    "integrity": "sha512-l1hm1+7GxQ+zwdU2sea/LhD946on7XO2qk3Xq2XWSwBaWfdgchXdK567yzLtYSHn4sWYdiX+x4nnaj+saKnJkw==",
+    "file": "embla-carousel-class-names/embla-carousel-class-names.umd.js",
+    "sha256": "eab227758fbce9184669eed0a345664ba5f4f80c3e239e4f4766fefede42a93b"
+  },
+  {
+    "name": "embla-carousel-fade",
+    "version": "8.6.0",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel-fade/-/embla-carousel-fade-8.6.0.tgz",
+    "integrity": "sha512-qaYsx5mwCz72ZrjlsXgs1nKejSrW+UhkbOMwLgfRT7w2LtdEB03nPRI06GHuHv5ac2USvbEiX2/nAHctcDwvpg==",
+    "file": "embla-carousel-fade/embla-carousel-fade.umd.js",
+    "sha256": "0a292d4290bb93b9345447122e023293ce373b13e62faa4a66eb427e9b697ce2"
+  },
+  {
+    "name": "embla-carousel-wheel-gestures",
+    "version": "8.0.2",
+    "license": "MIT",
+    "source": "https://registry.npmjs.org/embla-carousel-wheel-gestures/-/embla-carousel-wheel-gestures-8.0.2.tgz",
+    "integrity": "sha512-gtE8xHRwMGsfsMAgco/QoYhvcxNoMLmFF0DaWH7FXJJWk8RlEZyiZHZRZL6TZVCgooo9/hKyYWITLaSZLIvkbQ==",
+    "file": "embla-carousel-wheel-gestures/embla-carousel-wheel-gestures.umd.js",
+    "sha256": "3877da95f634fd44e768845a82dcf7cbbe7f041e183f25549be15875d1ac17cf"
+  }
+]

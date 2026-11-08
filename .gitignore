@@ -1,0 +1,9 @@
+node_modules/
+dist/
+test-results/
+.playground/
+*.log
+__pycache__/
+.agents/
+.codex/
+.aws/

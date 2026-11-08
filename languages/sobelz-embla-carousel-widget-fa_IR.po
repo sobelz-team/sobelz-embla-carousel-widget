@@ -1,0 +1,510 @@
+# Persian translations for sobelz-embla-carousel-widget.
+msgid ""
+msgstr "Project-Id-Version: sobelz-embla-carousel-widget 1.1.0\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "%1$d of %2$d"
+msgstr "%1$d از %2$d"
+
+msgid "Activate Elementor Pro and choose a published Loop Item template. Circular template references are not allowed."
+msgstr "Elementor Pro را فعال و یک قالب منتشرشدهٔ Loop Item انتخاب کنید. ارجاع حلقه‌ای بین قالب‌ها مجاز نیست."
+
+msgid "Active dot / progress color"
+msgstr "رنگ نقطهٔ فعال / پیشرفت"
+
+msgid "Add your slide content here."
+msgstr "محتوای اسلاید را اینجا وارد کنید."
+
+msgid "Adds Embla state classes such as is-snapped, is-in-view and is-dragging for custom styling."
+msgstr "کلاس‌های وضعیت Embla مانند is-snapped، is-in-view و is-dragging را برای استایل سفارشی اضافه می‌کند."
+
+msgid "All scripts are bundled locally. Only enabled plugins are loaded and registered with Embla."
+msgstr "تمام اسکریپت‌ها داخل افزونه هستند. فقط قابلیت‌های فعال بارگذاری و در Embla ثبت می‌شوند."
+
+msgid "Arrow background"
+msgstr "پس‌زمینهٔ فلش"
+
+msgid "Arrow button size"
+msgstr "اندازهٔ دکمهٔ فلش"
+
+msgid "Arrow color"
+msgstr "رنگ فلش"
+
+msgid "Arrow key navigation"
+msgstr "ناوبری با کلیدهای جهت‌نما"
+
+msgid "Ascending"
+msgstr "صعودی"
+
+msgid "Author IDs"
+msgstr "شناسهٔ نویسنده‌ها"
+
+msgid "Auto (visible group)"
+msgstr "خودکار (گروه قابل مشاهده)"
+
+msgid "Auto Height"
+msgstr "ارتفاع خودکار (Auto Height)"
+
+msgid "Auto Scroll (continuous)"
+msgstr "اسکرول خودکار پیوسته (Auto Scroll)"
+
+msgid "Auto Scroll direction"
+msgstr "جهت حرکت پیوسته"
+
+msgid "Auto Scroll speed (px/frame)"
+msgstr "سرعت حرکت پیوسته (پیکسل در فریم)"
+
+msgid "Auto Scroll start delay (ms)"
+msgstr "تأخیر شروع حرکت پیوسته (میلی‌ثانیه)"
+
+msgid "Automatic movement"
+msgstr "حرکت خودکار"
+
+msgid "Autoplay (slide by slide)"
+msgstr "پخش خودکار اسلایدبه‌اسلاید (Autoplay)"
+
+msgid "Autoplay delay (ms)"
+msgstr "فاصلهٔ پخش خودکار (میلی‌ثانیه)"
+
+msgid "Axis"
+msgstr "محور"
+
+msgid "Backward"
+msgstr "عقب"
+
+msgid "Border radius"
+msgstr "گردی گوشه‌ها"
+
+msgid "Built-in post card"
+msgstr "کارت آمادهٔ نوشته"
+
+msgid "Button"
+msgstr "دکمه"
+
+msgid "Button background"
+msgstr "پس‌زمینهٔ دکمه"
+
+msgid "Button hover background"
+msgstr "پس‌زمینهٔ دکمه روی اشاره‌گر"
+
+msgid "Button link"
+msgstr "پیوند دکمه"
+
+msgid "Button text"
+msgstr "متن دکمه"
+
+msgid "Carousel accessible label"
+msgstr "عنوان دسترس‌پذیر کروسل"
+
+msgid "Carousel behavior"
+msgstr "رفتار کروسل"
+
+msgid "Center"
+msgstr "وسط"
+
+msgid "Choose a published Loop Item from Templates → Theme Builder → Loop Item. Its dynamic tags use each query result as the current post. Requires Elementor Pro."
+msgstr "یک Loop Item منتشرشده از قالب‌ها ← پوسته‌ساز ← Loop Item انتخاب کنید. تگ‌های پویا برای هر نتیجه، دادهٔ همان پست را می‌گیرند. به Elementor Pro نیاز دارد."
+
+msgid "Choose slide group"
+msgstr "انتخاب گروه اسلاید"
+
+msgid "Class Names"
+msgstr "کلاس‌های وضعیت (Class Names)"
+
+msgid "Comma-separated IDs, for example: 12, 34, 56."
+msgstr "شناسه‌ها را با ویرگول انگلیسی جدا کنید؛ مانند 12, 34, 56."
+
+msgid "Comment count"
+msgstr "تعداد دیدگاه‌ها"
+
+msgid "Content padding"
+msgstr "فاصلهٔ داخلی محتوا"
+
+msgid "Content source"
+msgstr "منبع محتوا"
+
+msgid "Content type"
+msgstr "نوع محتوا"
+
+msgid "Current archive / main query"
+msgstr "آرشیو جاری / کوئری اصلی"
+
+msgid "Current query follows the main page or archive, including its filters, order and pagination. The other sources use the settings below."
+msgstr "کوئری جاری از صفحه یا آرشیو اصلی، با فیلترها، ترتیب و صفحه‌بندی آن پیروی می‌کند. سایر منابع از تنظیمات زیر استفاده می‌کنند."
+
+msgid "Descending"
+msgstr "نزولی"
+
+msgid "Description"
+msgstr "توضیحات"
+
+msgid "Disable automatic motion and use instant navigation when the visitor requests reduced motion."
+msgstr "اگر کاربر کاهش حرکت را در دستگاهش انتخاب کرده باشد، حرکت خودکار غیرفعال و جابه‌جایی‌ها آنی می‌شوند."
+
+msgid "Dot color"
+msgstr "رنگ نقطه‌ها"
+
+msgid "Dot size"
+msgstr "اندازهٔ نقطه‌ها"
+
+msgid "Dynamic query"
+msgstr "کوئری پویا"
+
+msgid "Elementor Pro Loop Item"
+msgstr "قالب Loop Item المنتور پرو"
+
+msgid "Embla disables looping automatically when there are too few slides to loop without gaps."
+msgstr "اگر تعداد اسلایدها برای حلقهٔ بدون فضای خالی کافی نباشد، Embla حلقه را خودکار غیرفعال می‌کند."
+
+msgid "Embla physics duration, not milliseconds. Recommended: 20–60. Zero makes transitions instant."
+msgstr "مدت فیزیکی حرکت Embla است و برحسب میلی‌ثانیه نیست. مقدار پیشنهادی: ۲۰ تا ۶۰. صفر حرکت را آنی می‌کند."
+
+msgid "Embla plugins"
+msgstr "افزونه‌های Embla"
+
+msgid "End"
+msgstr "انتها"
+
+msgid "Excerpt length (words)"
+msgstr "طول خلاصه (تعداد کلمه)"
+
+msgid "Exclude current post"
+msgstr "حذف پست جاری از نتایج"
+
+msgid "Exclude post IDs"
+msgstr "شناسهٔ پست‌های مستثنا"
+
+msgid "Fade"
+msgstr "محو شدن (Fade)"
+
+msgid "Fade shows one slide at a time and cannot be combined with continuous Auto Scroll."
+msgstr "حالت Fade هر بار یک اسلاید نشان می‌دهد و با حرکت پیوستهٔ Auto Scroll ترکیب نمی‌شود."
+
+msgid "Featured slides"
+msgstr "اسلایدهای منتخب"
+
+msgid "Fixed number"
+msgstr "تعداد ثابت"
+
+msgid "Forward"
+msgstr "جلو"
+
+msgid "Free dragging"
+msgstr "درگ آزاد"
+
+msgid "Full"
+msgstr "کامل"
+
+msgid "Go to slide group %d"
+msgstr "رفتن به گروه اسلاید %d"
+
+msgid "Horizontal"
+msgstr "افقی"
+
+msgid "Horizontal wheel"
+msgstr "چرخ افقی"
+
+msgid "Image"
+msgstr "تصویر"
+
+msgid "Image and text"
+msgstr "تصویر و متن"
+
+msgid "Image fit"
+msgstr "نحوهٔ قرارگیری تصویر"
+
+msgid "Image height"
+msgstr "ارتفاع تصویر"
+
+msgid "Image resolution"
+msgstr "وضوح تصویر"
+
+msgid "In-view threshold"
+msgstr "آستانهٔ قابل مشاهده بودن"
+
+msgid "Include post IDs"
+msgstr "شناسهٔ پست‌های مورد نظر"
+
+msgid "Include term IDs"
+msgstr "شناسهٔ دسته‌ها / اصطلاح‌های مورد نظر"
+
+msgid "Included ID order"
+msgstr "ترتیب شناسه‌های واردشده"
+
+msgid "Infinite loop"
+msgstr "حلقهٔ بی‌نهایت"
+
+msgid "Initial slide (starts at 1)"
+msgstr "اسلاید آغازین (از ۱)"
+
+msgid "Instant autoplay transitions"
+msgstr "جابه‌جایی آنی در پخش خودکار"
+
+msgid "Items to load"
+msgstr "تعداد آیتم برای دریافت"
+
+msgid "Large"
+msgstr "بزرگ"
+
+msgid "Last modified"
+msgstr "آخرین ویرایش"
+
+msgid "Last-to-first loop gap"
+msgstr "فاصلهٔ اتصال آخرین اسلاید به اولین"
+
+msgid "Layout"
+msgstr "چیدمان"
+
+msgid "Leave empty to use the slide gap. Set a value to customize the seam between the last and first slides, including in RTL and vertical layouts."
+msgstr "خالی بگذارید تا از فاصلهٔ اسلایدها پیروی کند. برای تنظیم جداگانهٔ فاصلهٔ اتصال آخرین اسلاید به اولین، مقدار وارد کنید. در RTL و حالت عمودی هم اعمال می‌شود."
+
+msgid "Loop Item template"
+msgstr "قالب Loop Item"
+
+msgid "Manual slides"
+msgstr "اسلایدهای دستی"
+
+msgid "Match carousel axis"
+msgstr "مطابق محور کروسل"
+
+msgid "Medium"
+msgstr "متوسط"
+
+msgid "Medium large"
+msgstr "متوسط بزرگ"
+
+msgid "Menu order"
+msgstr "ترتیب منو"
+
+msgid "Mouse and touch dragging"
+msgstr "کشیدن با ماوس و لمس"
+
+msgid "Mouse drag threshold (px)"
+msgstr "آستانهٔ کشیدن ماوس (پیکسل)"
+
+msgid "Navigation"
+msgstr "ناوبری"
+
+msgid "Navigation and accessibility"
+msgstr "ناوبری و دسترس‌پذیری"
+
+msgid "Next slide group"
+msgstr "گروه اسلاید بعدی"
+
+msgid "No items found."
+msgstr "آیتمی پیدا نشد."
+
+msgid "No results message"
+msgstr "پیام نبود نتیجه"
+
+msgid "None"
+msgstr "هیچ‌کدام"
+
+msgid "Offset"
+msgstr "تعداد آیتم برای ردکردن از ابتدا"
+
+msgid "Optional. Uses the elementor/query/QUERY_ID hook to customize WP_Query, including meta queries and relationship fields."
+msgstr "اختیاری؛ از هوک elementor/query/QUERY_ID برای سفارشی‌سازی WP_Query، از جمله متاکوئری و فیلدهای رابطه‌ای استفاده می‌کند."
+
+msgid "Order"
+msgstr "جهت ترتیب"
+
+msgid "Order by"
+msgstr "مرتب‌سازی بر اساس"
+
+msgid "Pause automatic rotation"
+msgstr "توقف پخش خودکار"
+
+msgid "Pause on hover"
+msgstr "توقف روی اشاره‌گر"
+
+msgid "Post type"
+msgstr "نوع نوشته"
+
+msgid "Posts / custom post type"
+msgstr "نوشته‌ها / نوع نوشتهٔ سفارشی"
+
+msgid "Previous slide group"
+msgstr "گروه اسلاید قبلی"
+
+msgid "Publish date"
+msgstr "تاریخ انتشار"
+
+msgid "Query"
+msgstr "کوئری"
+
+msgid "Query ID"
+msgstr "شناسهٔ کوئری (Query ID)"
+
+msgid "Query item layout"
+msgstr "قالب نمایش آیتم‌های کوئری"
+
+msgid "Query source"
+msgstr "منبع کوئری"
+
+msgid "Random"
+msgstr "تصادفی"
+
+msgid "Read more"
+msgstr "بیشتر بخوانید"
+
+msgid "Related posts"
+msgstr "نوشته‌های مرتبط"
+
+msgid "Respect reduced motion"
+msgstr "رعایت ترجیح کاهش حرکت"
+
+msgid "Saved Elementor template"
+msgstr "قالب ذخیره‌شدهٔ Elementor"
+
+msgid "Scroll"
+msgstr "اسکرول"
+
+msgid "Scroll containment"
+msgstr "محدودسازی اسکرول"
+
+msgid "Scroll group size"
+msgstr "تعداد اسلاید در هر حرکت"
+
+msgid "Scroll progress"
+msgstr "پیشرفت اسکرول"
+
+msgid "Select a published Elementor template. Circular template references are not allowed."
+msgstr "یک قالب منتشرشدهٔ Elementor انتخاب کنید. ارجاع حلقه‌ای بین قالب‌ها مجاز نیست."
+
+msgid "Select a published template from Elementor → Templates. The slide title is used as its accessible label."
+msgstr "یک قالب منتشرشده از Elementor ← قالب‌ها انتخاب کنید. عنوان اسلاید برای برچسب دسترس‌پذیری استفاده می‌شود."
+
+msgid "Select posts by ID"
+msgstr "انتخاب پست‌ها با شناسه"
+
+msgid "Show arrows"
+msgstr "نمایش فلش‌ها"
+
+msgid "Show dots"
+msgstr "نمایش نقطه‌ها"
+
+msgid "Show play / pause"
+msgstr "نمایش پخش / توقف"
+
+msgid "Show scroll progress"
+msgstr "نمایش نوار پیشرفت"
+
+msgid "Site default"
+msgstr "پیش‌فرض سایت"
+
+msgid "Skip snaps on vigorous dragging"
+msgstr "عبور از نقاط توقف هنگام کشیدن سریع"
+
+msgid "Slide card"
+msgstr "کارت اسلاید"
+
+msgid "Slide gap"
+msgstr "فاصلهٔ اسلایدها"
+
+msgid "Slide group %1$d of %2$d"
+msgstr "گروه اسلاید %1$d از %2$d"
+
+msgid "Slide one"
+msgstr "اسلاید اول"
+
+msgid "Slide three"
+msgstr "اسلاید سوم"
+
+msgid "Slide title"
+msgstr "عنوان اسلاید"
+
+msgid "Slide two"
+msgstr "اسلاید دوم"
+
+msgid "Slides"
+msgstr "اسلایدها"
+
+msgid "Slides per scroll"
+msgstr "اسلاید در هر حرکت"
+
+msgid "Slides per view"
+msgstr "اسلاید قابل مشاهده"
+
+msgid "Snap alignment"
+msgstr "تراز نقطهٔ توقف"
+
+msgid "Sobelz Embla Carousel"
+msgstr "Sobelz Embla Carousel — کروسل امبلای سوبلز"
+
+msgid "Start"
+msgstr "ابتدا"
+
+msgid "Start automatic rotation"
+msgstr "شروع پخش خودکار"
+
+msgid "Stop after interaction"
+msgstr "توقف بعد از تعامل"
+
+msgid "Stop on last slide group"
+msgstr "توقف در آخرین گروه اسلاید"
+
+msgid "Taxonomy"
+msgstr "طبقه‌بندی (Taxonomy)"
+
+msgid "Template"
+msgstr "قالب"
+
+msgid "Text alignment"
+msgstr "تراز متن"
+
+msgid "Text and button"
+msgstr "متن و دکمه"
+
+msgid "Text color"
+msgstr "رنگ متن"
+
+msgid "Text direction"
+msgstr "جهت متن"
+
+msgid "The carousel could not start. Please reload the page."
+msgstr "کروسل راه‌اندازی نشد. لطفاً صفحه را دوباره بارگذاری کنید."
+
+msgid "Thumbnail"
+msgstr "بندانگشتی"
+
+msgid "Title"
+msgstr "عنوان"
+
+msgid "Title HTML tag"
+msgstr "تگ HTML عنوان"
+
+msgid "Transition duration"
+msgstr "مدت جابه‌جایی"
+
+msgid "Transition effect"
+msgstr "افکت جابه‌جایی"
+
+msgid "Used for term filtering, or to find items sharing terms with the current post in Related mode."
+msgstr "برای فیلتر دسته‌ها و اصطلاح‌ها استفاده می‌شود. در حالت مرتبط، آیتم‌های دارای دسته یا اصطلاح مشترک با پست جاری را پیدا می‌کند."
+
+msgid "Vertical"
+msgstr "عمودی"
+
+msgid "Vertical viewport height"
+msgstr "ارتفاع نمای عمودی"
+
+msgid "Vertical wheel"
+msgstr "چرخ عمودی"
+
+msgid "Wheel Gestures"
+msgstr "چرخ ماوس و ترک‌پد (Wheel Gestures)"
+
+msgid "Wheel input axis"
+msgstr "محور ورودی چرخ"
+
+msgid "When disabled, movement resumes after dragging, hovering or leaving keyboard focus."
+msgstr "اگر خاموش باشد، حرکت پس از کشیدن، خروج اشاره‌گر یا خروج فوکوس صفحه‌کلید ادامه می‌یابد."
+
+msgid "carousel"
+msgstr "کروسل"
+
+msgid "slide"
+msgstr "اسلاید"
+
+msgid "sobelz-embla-carousel-widget requires Elementor %s or newer. Install or update Elementor to use the widget."
+msgstr "ویجت Embla به Elementor نسخهٔ %s یا جدیدتر نیاز دارد. لطفاً Elementor را نصب یا به‌روزرسانی کنید."
