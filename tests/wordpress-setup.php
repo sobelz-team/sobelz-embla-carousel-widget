@@ -26,7 +26,7 @@ eew_check( in_array( 'eew-autoplay', $instance->get_script_depends(), true ), 'A
 eew_check( ! in_array( 'eew-fade', $instance->get_script_depends(), true ), 'Unused dependency excluded' );
 
 // Syntax-check the actual shipped PHP files in this runtime.
-foreach ( array_merge( glob( EEW_PATH . 'includes/*.php' ), [ EEW_PATH . 'sobelz-embla-carousel-widget.php' ] ) as $file ) {
+foreach ( array_merge( glob( EEW_PATH . 'includes/*.php' ), glob( EEW_PATH . 'includes/updater/*.php' ), [ EEW_PATH . 'sobelz-embla-carousel-widget.php' ] ) as $file ) {
 	token_get_all( file_get_contents( $file ), TOKEN_PARSE );
 }
 

@@ -4,7 +4,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: elementor
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,15 +25,16 @@ Add the Sobelz Embla Carousel widget from Elementor's General category. Elemento
 * Reduced-motion preferences and editor lifecycle cleanup.
 * Responsive last-to-first loop spacing, following the slide gap by default or set independently.
 * English and Persian controls and frontend labels.
+* Self-hosted update checks using the shared Sobelz updater and update.json.
 
 All Embla scripts are shipped in assets/vendor. Neither WordPress nor the browser downloads libraries from a CDN. Enabled plugins are declared as Elementor script dependencies and passed to the EmblaCarousel constructor. When a plugin is newly enabled in the editor, the preview can load that same local script on demand. Shared files are reused across widget instances.
 
-The widget does not make external API calls. Images or content explicitly chosen by an editor may still use their configured URLs.
+Carousel scripts are served locally. The updater checks release metadata at https://plugins.sobelz.ir/sobelz-embla-carousel-widget/update.json when WordPress checks for updates, and downloads the ZIP from that feed during an update. The request uses WordPress's HTTP API and includes the WordPress version and site URL in its user agent, matching the shared Sobelz updater. Images or content explicitly chosen by an editor may use their configured URLs.
 
 == Installation ==
 
 1. Install and activate Elementor 3.20 or newer.
-2. Upload sobelz-embla-carousel-widget-1.1.0.zip in Plugins > Add New > Upload Plugin and activate it.
+2. Upload sobelz-embla-carousel-widget-1.2.0.zip in Plugins > Add New > Upload Plugin and activate it.
 3. Edit a page with Elementor and search for Sobelz Embla Carousel.
 4. Add slides, adjust Layout and Carousel behavior, and enable the Embla plugins you need.
 5. Publish the page. No npm install, build step, API key or CDN access is required on the WordPress server.
@@ -69,11 +70,20 @@ Enable Infinite loop, then use Layout > Last-to-first loop gap. Leave it empty t
 = How do I access Embla's API? =
 Listen for the bubbling eew:ready DOM event and use event.detail.api, or read the emblaApi property of the widget's .eew root. Each widget owns its own API instance.
 
+= How do updates work? =
+The Update URI header connects WordPress's update checks and plugin-details modal to the shared Sobelz updater. Successful metadata is cached for six hours. A forced WordPress update check and a completed update of this plugin clear the cache. The updater is registered independently of Elementor, so it remains available if the dependency is missing or outdated. WordPress controls whether to offer an update and whether automatic updates are enabled.
+
+= How do I publish a release? =
+Keep the plugin header, EEW_VERSION, Stable tag, package.json, package-lock.json and update.json versions aligned. Update the manifest's last_updated and changelog, then run npm run package. It produces a versioned ZIP plus dist/update.json and dist/sobelz-embla-carousel-widget.zip. Publish the latter two files together under https://plugins.sobelz.ir/sobelz-embla-carousel-widget/. The ZIP has the correct plugin directory at its root. The build validates version consistency; update.json is a separate server file and is not bundled in the installable ZIP.
+
 == Third-party code ==
 
 Embla core and its five first-party plugins are pinned to 8.6.0 (MIT). Wheel Gestures is pinned to 8.0.2 (MIT); its UMD distribution includes wheel-gestures (MIT). See THIRD-PARTY.md, individual LICENSE files and assets/vendor/manifest.json for sources, versions and hashes.
 
 == Changelog ==
+
+= 1.2.0 =
+Added the shared Sobelz update.json updater, Update URI header, plugin-details metadata and six-hour cache invalidation. Added release manifest and stable ZIP output with build-time version consistency checks.
 
 = 1.1.0 =
 Added dynamic queries, Pro Loop Item layouts with per-post context, Query ID and query-argument hooks, current/related/manual query sources, query filters and empty states. Disabled widget output caching for dynamic results. Fixed missing last-to-first spacing in infinite loops and added a responsive seam-gap control.

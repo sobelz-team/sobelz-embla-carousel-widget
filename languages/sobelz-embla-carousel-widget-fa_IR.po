@@ -1,6 +1,6 @@
 # Persian translations for sobelz-embla-carousel-widget.
 msgid ""
-msgstr "Project-Id-Version: sobelz-embla-carousel-widget 1.1.0\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
+msgstr "Project-Id-Version: sobelz-embla-carousel-widget 1.2.0\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "%1$d of %2$d"
 msgstr "%1$d از %2$d"

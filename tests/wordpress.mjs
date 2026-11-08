@@ -22,6 +22,12 @@ const server = await runCLI({
 
 let browser;
 try {
+  await server.playground.writeFile('/wordpress/wp-content/eew-release-manifest.json', readFileSync(path.join(root, 'update.json'), 'utf8'));
+  const updater = await server.playground.run({ code: readFileSync(path.join(root, 'tests/wordpress-updater.php'), 'utf8') }).catch(error => { throw new Error(error.message); });
+  if (updater.errors) console.log(updater.errors);
+  const updaterResult = new TextDecoder().decode(updater.bytes);
+  console.log(updaterResult);
+  assert.equal(JSON.parse(updaterResult).updater, 'passed');
   await server.playground.writeFile('/wordpress/wp-content/eew-query-tests.php', readFileSync(path.join(root, 'tests/wordpress-query.php'), 'utf8'));
   const result = await server.playground.run({ code: readFileSync(path.join(root, 'tests/wordpress-setup.php'), 'utf8') }).catch(error => { throw new Error(error.message); });
   if (result.errors) console.log(result.errors);

@@ -17,7 +17,8 @@ def main():
     missing = strings - mapping.keys()
     if missing:
         raise ValueError(f"Untranslated strings: {sorted(missing)}")
-    header = "Project-Id-Version: sobelz-embla-carousel-widget 1.1.0\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
+    version = re.search(r"define\( 'EEW_VERSION', '([^']+)' \)", sources[0].read_text())[1]
+    header = f"Project-Id-Version: sobelz-embla-carousel-widget {version}\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
     messages = {"": header, **{key: mapping[key] for key in sorted(strings)}}
     destination = ROOT / "languages"
     destination.mkdir(exist_ok=True)
