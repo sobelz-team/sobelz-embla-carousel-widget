@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/** WordPress queries shared by the built-in cards and Elementor Pro Loop Items. */
+/** WordPress post and term queries shared by cards and Elementor Pro Loop Items. */
 final class Carousel_Query {
 	const MAX_ITEMS = 100;
 
@@ -15,6 +15,10 @@ final class Carousel_Query {
 		return $types;
 	}
 
+	public static function taxonomies() {
+		return array_filter( get_taxonomies( [ 'public' => true ], 'objects' ), 'is_taxonomy_viewable' );
+	}
+
 	private static function integer( $settings, $key, $default, $min, $max ) {
 		$value = isset( $settings[ $key ] ) && is_numeric( $settings[ $key ] ) ? (int) $settings[ $key ] : $default;
 		return max( $min, min( $max, $value ) );
@@ -22,7 +26,55 @@ final class Carousel_Query {
 
 	public static function source( array $settings ) {
 		$source = $settings['query_source'] ?? 'posts';
-		return in_array( $source, [ 'posts', 'current', 'related', 'selection' ], true ) ? $source : 'posts';
+		return in_array( $source, [ 'posts', 'current', 'related', 'selection', 'terms' ], true ) ? $source : 'posts';
+	}
+
+	public static function term_args( array $settings ) {
+		$taxonomy = sanitize_key( $settings['query_taxonomy'] ?? 'category' );
+		$allowed_orderby = [ 'name', 'slug', 'term_id', 'count', 'include' ];
+		$args = [
+			'taxonomy'   => $taxonomy,
+			'number'     => self::integer( $settings, 'query_per_page', 6, 1, self::MAX_ITEMS ),
+			'offset'     => self::integer( $settings, 'query_offset', 0, 0, 10000 ),
+			'orderby'    => in_array( $settings['query_term_orderby'] ?? '', $allowed_orderby, true ) ? $settings['query_term_orderby'] : 'name',
+			'order'      => in_array( $settings['query_term_order'] ?? '', [ 'ASC', 'DESC' ], true ) ? $settings['query_term_order'] : 'ASC',
+			'hide_empty' => 'yes' === ( $settings['query_hide_empty'] ?? 'yes' ),
+			'fields'     => 'all',
+		];
+		$include = wp_parse_id_list( $settings['query_term_ids'] ?? '' );
+		$exclude = wp_parse_id_list( $settings['query_exclude_term_ids'] ?? '' );
+		// WP_Term_Query ignores exclude when include is supplied.
+		if ( $include ) {
+			$args['include'] = array_values( array_diff( $include, $exclude ) ) ?: [ 0 ];
+		} elseif ( $exclude ) {
+			$args['exclude'] = $exclude;
+		}
+		if ( isset( $settings['query_term_parent'] ) && '' !== $settings['query_term_parent'] && is_numeric( $settings['query_term_parent'] ) ) {
+			$args['parent'] = self::integer( $settings, 'query_term_parent', 0, 0, PHP_INT_MAX );
+		}
+		return $args;
+	}
+
+	private static function run_terms( array $settings, $widget ) {
+		$query = new \WP_Term_Query();
+		$query->terms = [];
+		$args = apply_filters( 'eew/term_query_args', self::term_args( $settings ), $widget, $settings );
+		if ( ! is_array( $args ) ) {
+			return $query;
+		}
+		// An empty taxonomy would query every taxonomy, including internal ones.
+		$taxonomies = array_intersect( (array) ( $args['taxonomy'] ?? [] ), array_keys( self::taxonomies() ) );
+		if ( ! $taxonomies ) {
+			return $query;
+		}
+		$args['taxonomy'] = array_values( $taxonomies );
+		$args['number'] = self::integer( $args, 'number', 6, 1, self::MAX_ITEMS );
+		$args['fields'] = 'all';
+		$terms = $query->query( $args );
+		$query->terms = is_array( $terms ) ? array_slice( array_values( array_filter( $terms, static function ( $term ) use ( $taxonomies ) {
+			return $term instanceof \WP_Term && in_array( $term->taxonomy, $taxonomies, true );
+		} ) ), 0, self::MAX_ITEMS ) : [];
+		return $query;
 	}
 
 	public static function args( array $settings ) {
@@ -93,6 +145,9 @@ final class Carousel_Query {
 	}
 
 	public static function run( array $settings, $widget ) {
+		if ( 'terms' === self::source( $settings ) ) {
+			return self::run_terms( $settings, $widget );
+		}
 		$args = apply_filters( 'eew/query_args', self::args( $settings ), $widget, $settings );
 		$query = new \WP_Query();
 		$id = preg_replace( '/[^a-zA-Z0-9_-]/', '', (string) ( $settings['query_id'] ?? '' ) );

@@ -76,7 +76,7 @@ final class Carousel_Widget extends Widget_Base {
 			'query' => __( 'Dynamic query', 'sobelz-embla-carousel-widget' ),
 		], 'manual' );
 		$this->select_control( 'query_layout', __( 'Query item layout', 'sobelz-embla-carousel-widget' ), [
-			'card' => __( 'Built-in post card', 'sobelz-embla-carousel-widget' ),
+			'card' => __( 'Built-in card', 'sobelz-embla-carousel-widget' ),
 			'loop_item' => __( 'Elementor Pro Loop Item', 'sobelz-embla-carousel-widget' ),
 		], 'card', [ 'condition' => [ 'content_source' => 'query' ] ] );
 		$loop_templates = [];
@@ -87,7 +87,7 @@ final class Carousel_Widget extends Widget_Base {
 			'label' => __( 'Loop Item template', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::SELECT2,
 			'options' => $loop_templates, 'label_block' => true,
 			'condition' => [ 'content_source' => 'query', 'query_layout' => 'loop_item' ],
-			'description' => __( 'Choose a published Loop Item from Templates → Theme Builder → Loop Item. Its dynamic tags use each query result as the current post. Requires Elementor Pro.', 'sobelz-embla-carousel-widget' ),
+			'description' => __( 'Choose a published Loop Item from Templates → Theme Builder → Loop Item. For taxonomy queries, use Archive Title, Archive Description and Archive URL dynamic tags. Requires Elementor Pro.', 'sobelz-embla-carousel-widget' ),
 		] );
 		$repeater = new Repeater();
 		$repeater->add_control( 'content_type', [
@@ -148,6 +148,7 @@ final class Carousel_Widget extends Widget_Base {
 		$this->start_controls_section( 'section_query', [ 'label' => __( 'Query', 'sobelz-embla-carousel-widget' ), 'condition' => [ 'content_source' => 'query' ] ] );
 		$this->select_control( 'query_source', __( 'Query source', 'sobelz-embla-carousel-widget' ), [
 			'posts' => __( 'Posts / custom post type', 'sobelz-embla-carousel-widget' ),
+			'terms' => __( 'Categories / taxonomy terms', 'sobelz-embla-carousel-widget' ),
 			'current' => __( 'Current archive / main query', 'sobelz-embla-carousel-widget' ),
 			'related' => __( 'Related posts', 'sobelz-embla-carousel-widget' ),
 			'selection' => __( 'Select posts by ID', 'sobelz-embla-carousel-widget' ),
@@ -156,7 +157,8 @@ final class Carousel_Widget extends Widget_Base {
 		foreach ( Carousel_Query::post_types() as $name => $type ) {
 			$types[ $name ] = $type->labels->name . ' (' . $name . ')';
 		}
-		$this->select_control( 'query_post_type', __( 'Post type', 'sobelz-embla-carousel-widget' ), $types, 'post', [ 'condition' => [ 'query_source!' => 'current' ] ] );
+		$post_sources = [ 'posts', 'related', 'selection' ];
+		$this->select_control( 'query_post_type', __( 'Post type', 'sobelz-embla-carousel-widget' ), $types, 'post', [ 'condition' => [ 'query_source' => $post_sources ] ] );
 		$this->number_control( 'query_per_page', __( 'Items to load', 'sobelz-embla-carousel-widget' ), 6, 1, Carousel_Query::MAX_ITEMS, [ 'condition' => [ 'query_source!' => 'current' ], 'dynamic' => [ 'active' => true ] ] );
 		$this->number_control( 'query_offset', __( 'Offset', 'sobelz-embla-carousel-widget' ), 0, 0, 10000, [ 'condition' => [ 'query_source!' => 'current' ] ] );
 		$this->select_control( 'query_orderby', __( 'Order by', 'sobelz-embla-carousel-widget' ), [
@@ -164,27 +166,41 @@ final class Carousel_Widget extends Widget_Base {
 			'title' => __( 'Title', 'sobelz-embla-carousel-widget' ), 'menu_order' => __( 'Menu order', 'sobelz-embla-carousel-widget' ),
 			'comment_count' => __( 'Comment count', 'sobelz-embla-carousel-widget' ), 'rand' => __( 'Random', 'sobelz-embla-carousel-widget' ),
 			'post__in' => __( 'Included ID order', 'sobelz-embla-carousel-widget' ),
-		], 'date', [ 'condition' => [ 'query_source!' => 'current' ] ] );
-		$this->select_control( 'query_order', __( 'Order', 'sobelz-embla-carousel-widget' ), [ 'DESC' => __( 'Descending', 'sobelz-embla-carousel-widget' ), 'ASC' => __( 'Ascending', 'sobelz-embla-carousel-widget' ) ], 'DESC', [ 'condition' => [ 'query_source!' => 'current' ] ] );
+		], 'date', [ 'condition' => [ 'query_source' => $post_sources ] ] );
+		$this->select_control( 'query_order', __( 'Order', 'sobelz-embla-carousel-widget' ), [ 'DESC' => __( 'Descending', 'sobelz-embla-carousel-widget' ), 'ASC' => __( 'Ascending', 'sobelz-embla-carousel-widget' ) ], 'DESC', [ 'condition' => [ 'query_source' => $post_sources ] ] );
+		$this->select_control( 'query_term_orderby', __( 'Order by', 'sobelz-embla-carousel-widget' ), [
+			'name' => __( 'Name', 'sobelz-embla-carousel-widget' ), 'slug' => __( 'Slug', 'sobelz-embla-carousel-widget' ),
+			'term_id' => __( 'Term ID', 'sobelz-embla-carousel-widget' ), 'count' => __( 'Post count', 'sobelz-embla-carousel-widget' ),
+			'include' => __( 'Included ID order', 'sobelz-embla-carousel-widget' ),
+		], 'name', [ 'condition' => [ 'query_source' => 'terms' ] ] );
+		$this->select_control( 'query_term_order', __( 'Order', 'sobelz-embla-carousel-widget' ), [ 'ASC' => __( 'Ascending', 'sobelz-embla-carousel-widget' ), 'DESC' => __( 'Descending', 'sobelz-embla-carousel-widget' ) ], 'ASC', [ 'condition' => [ 'query_source' => 'terms' ] ] );
 		$taxonomies = [ '' => __( 'None', 'sobelz-embla-carousel-widget' ) ];
-		foreach ( get_taxonomies( [ 'public' => true ], 'objects' ) as $name => $taxonomy ) {
+		foreach ( Carousel_Query::taxonomies() as $name => $taxonomy ) {
 			$taxonomies[ $name ] = $taxonomy->labels->name . ' (' . $name . ')';
 		}
 		$this->select_control( 'query_taxonomy', __( 'Taxonomy', 'sobelz-embla-carousel-widget' ), $taxonomies, 'category', [
 			'condition' => [ 'query_source!' => 'current' ],
-			'description' => __( 'Used for term filtering, or to find items sharing terms with the current post in Related mode.', 'sobelz-embla-carousel-widget' ),
+			'description' => __( 'In taxonomy mode, loops over the terms themselves: post categories, product categories, brands or any public taxonomy. In post modes, filters posts by their terms.', 'sobelz-embla-carousel-widget' ),
+		] );
+		$this->toggle( 'query_hide_empty', __( 'Hide empty terms', 'sobelz-embla-carousel-widget' ), true, [ 'condition' => [ 'query_source' => 'terms' ] ] );
+		$this->add_control( 'query_term_parent', [
+			'label' => __( 'Parent term ID', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::NUMBER, 'min' => 0, 'default' => '',
+			'condition' => [ 'query_source' => 'terms' ],
+			'description' => __( 'Leave empty for all levels. Use 0 for top-level terms, or a term ID for its direct children.', 'sobelz-embla-carousel-widget' ),
 		] );
 		foreach ( [
-			'query_term_ids' => [ __( 'Include term IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source' => [ 'posts', 'selection' ], 'query_taxonomy!' => '' ] ],
-			'query_include_ids' => [ __( 'Include post IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source!' => 'current' ] ],
-			'query_exclude_ids' => [ __( 'Exclude post IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source!' => 'current' ] ],
-			'query_authors' => [ __( 'Author IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source!' => 'current' ] ],
+			'query_term_ids' => [ __( 'Include term IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source' => [ 'posts', 'selection', 'terms' ], 'query_taxonomy!' => '' ] ],
+			'query_exclude_term_ids' => [ __( 'Exclude term IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source' => 'terms' ] ],
+			'query_include_ids' => [ __( 'Include post IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source' => $post_sources ] ],
+			'query_exclude_ids' => [ __( 'Exclude post IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source' => $post_sources ] ],
+			'query_authors' => [ __( 'Author IDs', 'sobelz-embla-carousel-widget' ), [ 'query_source' => $post_sources ] ],
 		] as $key => $control ) {
 			$this->add_control( $key, [ 'label' => $control[0], 'type' => Controls_Manager::TEXT, 'dynamic' => [ 'active' => true ], 'condition' => $control[1], 'description' => __( 'Comma-separated IDs, for example: 12, 34, 56.', 'sobelz-embla-carousel-widget' ) ] );
 		}
 		$this->toggle( 'query_exclude_current', __( 'Exclude current post', 'sobelz-embla-carousel-widget' ), false, [ 'condition' => [ 'query_source' => [ 'posts', 'selection' ] ] ] );
 		$this->add_control( 'query_id', [
 			'label' => __( 'Query ID', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::TEXT,
+			'condition' => [ 'query_source!' => 'terms' ],
 			'placeholder' => 'my_embla_query', 'description' => __( 'Optional. Uses the elementor/query/QUERY_ID hook to customize WP_Query, including meta queries and relationship fields.', 'sobelz-embla-carousel-widget' ),
 		] );
 		$this->number_control( 'query_excerpt_length', __( 'Excerpt length (words)', 'sobelz-embla-carousel-widget' ), 24, 0, 100, [ 'condition' => [ 'query_layout' => 'card' ] ] );
@@ -335,7 +351,7 @@ final class Carousel_Widget extends Widget_Base {
 				}
 			}
 			$query = Carousel_Query::run( $settings, $this );
-			$slides = $query->posts;
+			$slides = $query instanceof \WP_Term_Query ? $query->terms : $query->posts;
 		} else {
 			$slides = $settings['slides'] ?? [];
 		}
@@ -393,13 +409,29 @@ final class Carousel_Widget extends Widget_Base {
 
 	private function render_items( $items, $settings, $query, $document ) {
 		$context = $query ? Loop_Template::capture_context() : null;
-		if ( $query ) {
+		if ( $query instanceof \WP_Query ) {
 			$GLOBALS['wp_query'] = $query;
 		}
 		try {
 			foreach ( $items as $index => $item ) {
 				$post_id = 0;
-				if ( $query ) {
+				$term_id = 0;
+				$taxonomy = '';
+				if ( $query instanceof \WP_Term_Query ) {
+					$term = $item;
+					$term_id = (int) $term->term_id;
+					$taxonomy = $term->taxonomy;
+					Loop_Template::term_context( $term );
+					$item = [ '_id' => 'term-' . $term_id, 'content_type' => 'card', 'title' => $term->name ];
+					if ( ! $document ) {
+						$length = max( 0, min( 100, (int) ( $settings['query_excerpt_length'] ?? 24 ) ) );
+						$link = get_term_link( $term );
+						$item['image'] = [ 'id' => get_term_meta( $term_id, 'thumbnail_id', true ) ];
+						$item['description'] = $length ? wp_trim_words( wp_strip_all_tags( $term->description ), $length ) : '';
+						$item['button_text'] = $settings['query_button_text'] ?? __( 'Read more', 'sobelz-embla-carousel-widget' );
+						$item['link'] = [ 'url' => is_wp_error( $link ) ? '' : $link ];
+					}
+				} elseif ( $query instanceof \WP_Query ) {
 					$query->the_post();
 					$post_id = get_the_ID();
 					$item = [
@@ -416,10 +448,10 @@ final class Carousel_Widget extends Widget_Base {
 				$label = sprintf( __( '%1$d of %2$d', 'sobelz-embla-carousel-widget' ), $index + 1, count( $items ) );
 				$label .= empty( $item['title'] ) ? '' : ': ' . wp_strip_all_tags( $item['title'] );
 				?>
-				<div class="eew__slide elementor-repeater-item-<?php echo esc_attr( $item['_id'] ?? (string) $index ); ?>" role="group" aria-roledescription="<?php esc_attr_e( 'slide', 'sobelz-embla-carousel-widget' ); ?>" aria-label="<?php echo esc_attr( $label ); ?>"<?php if ( $post_id ) : ?> data-post-id="<?php echo esc_attr( $post_id ); ?>"<?php endif; ?>>
+				<div class="eew__slide elementor-repeater-item-<?php echo esc_attr( $item['_id'] ?? (string) $index ); ?>" role="group" aria-roledescription="<?php esc_attr_e( 'slide', 'sobelz-embla-carousel-widget' ); ?>" aria-label="<?php echo esc_attr( $label ); ?>"<?php if ( $post_id ) : ?> data-post-id="<?php echo esc_attr( $post_id ); ?>"<?php elseif ( $term_id ) : ?> data-term-id="<?php echo esc_attr( $term_id ); ?>" data-taxonomy="<?php echo esc_attr( $taxonomy ); ?>"<?php endif; ?>>
 					<?php
 					if ( $document ) {
-						Loop_Template::render( $document );
+						Loop_Template::render( $document, $term_id ?: $post_id );
 					} else {
 						$this->render_slide( $item, $settings, $index );
 					}

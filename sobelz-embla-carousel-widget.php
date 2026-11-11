@@ -2,7 +2,7 @@
 /**
  * Plugin Name: sobelz-embla-carousel-widget
  * Description: A responsive Elementor carousel with locally bundled Embla scripts and on-demand plugins.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: elementor
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'EEW_VERSION', '1.2.0' );
+define( 'EEW_VERSION', '1.3.0' );
 define( 'EEW_FILE', __FILE__ );
 define( 'EEW_PATH', plugin_dir_path( __FILE__ ) );
 define( 'EEW_URL', plugin_dir_url( __FILE__ ) );

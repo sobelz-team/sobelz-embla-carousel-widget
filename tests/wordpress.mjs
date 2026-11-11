@@ -29,6 +29,7 @@ try {
   console.log(updaterResult);
   assert.equal(JSON.parse(updaterResult).updater, 'passed');
   await server.playground.writeFile('/wordpress/wp-content/eew-query-tests.php', readFileSync(path.join(root, 'tests/wordpress-query.php'), 'utf8'));
+  await server.playground.writeFile('/wordpress/wp-content/eew-term-tests.php', readFileSync(path.join(root, 'tests/wordpress-terms.php'), 'utf8'));
   const result = await server.playground.run({ code: readFileSync(path.join(root, 'tests/wordpress-setup.php'), 'utf8') }).catch(error => { throw new Error(error.message); });
   if (result.errors) console.log(result.errors);
   const text = new TextDecoder().decode(result.bytes);
@@ -42,7 +43,7 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   const requests = [];
   page.on('request', request => { if (request.url().includes('/assets/vendor/')) requests.push(request.url()); });
-  for (const name of ['plain', 'basic', 'autoplay', 'fade', 'vertical', 'template', 'query', 'query_hook', 'loop_item']) {
+  for (const name of ['plain', 'basic', 'autoplay', 'fade', 'vertical', 'template', 'query', 'query_hook', 'loop_item', 'terms', 'term_loop']) {
     console.log('Checking WordPress page:', name);
     requests.length = 0;
     await page.goto(server.serverUrl + '/?page_id=' + setup.pages[name], { waitUntil: 'networkidle' });
@@ -89,6 +90,16 @@ try {
         const itemIds = await page.locator('.eew-test-post').evaluateAll(nodes => nodes.map(node => Number(node.dataset.itemId)));
         assert.deepEqual(itemIds, setup.queries.events, 'Template renders a distinct current post for each item');
       }
+    }
+    if (['terms', 'term_loop'].includes(name)) {
+      const ids = await page.locator('.eew__slide[data-term-id]').evaluateAll(nodes => nodes.map(node => Number(node.dataset.termId)));
+      assert.deepEqual(ids, setup.queries.terms);
+      if (name === 'term_loop') {
+        const itemIds = await page.locator('.eew-test-term').evaluateAll(nodes => nodes.map(node => Number(node.dataset.itemId)));
+        assert.deepEqual(itemIds, setup.queries.terms, 'Template renders a distinct archive context for each term');
+      }
+      await page.locator('.eew__next').click();
+      assert.equal(await page.locator('.eew').evaluate(root => root.emblaApi.selectedScrollSnap()), 1);
     }
     console.log('WordPress browser check:', name, data.plugins.join(', ') || 'core');
   }

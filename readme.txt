@@ -4,7 +4,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: elementor
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,7 @@ Add the Sobelz Embla Carousel widget from Elementor's General category. Elemento
 
 * Image/text/button slides or published saved Elementor templates.
 * Dynamic WordPress queries with post types, terms, authors, included/excluded IDs, offset and ordering.
+* Taxonomy term loops for blog categories, product categories, brands and other public taxonomies, with term cards or Loop Items.
 * Elementor Pro Loop Item templates rendered once per query result, with each post's dynamic context.
 * Current main query, related posts and the standard Elementor Query ID hook.
 * Responsive slides per view and spacing, using Elementor's responsive controls and breakpoints.
@@ -34,7 +35,7 @@ Carousel scripts are served locally. The updater checks release metadata at http
 == Installation ==
 
 1. Install and activate Elementor 3.20 or newer.
-2. Upload sobelz-embla-carousel-widget-1.2.0.zip in Plugins > Add New > Upload Plugin and activate it.
+2. Upload sobelz-embla-carousel-widget-1.3.0.zip in Plugins > Add New > Upload Plugin and activate it.
 3. Edit a page with Elementor and search for Sobelz Embla Carousel.
 4. Add slides, adjust Layout and Carousel behavior, and enable the Embla plugins you need.
 5. Publish the page. No npm install, build step, API key or CDN access is required on the WordPress server.
@@ -59,7 +60,10 @@ Publish a template in Templates > Saved Templates, then select Saved Elementor t
 Publish a Loop Item in Templates > Theme Builder > Loop Item. In this widget select Content source > Dynamic query, choose Query item layout > Elementor Pro Loop Item and select the template. Then configure the Query section. The template supplies the design; WP_Query supplies the items. Dynamic title, image, permalink and other tags resolve for each result post. Pro must be active and support the Loop Item document type. Pro code is not bundled with this plugin.
 
 = Can I query items without Elementor Pro? =
-Yes. Choose Dynamic query and Built-in post card. Select a public post type, filters, limit, offset and order. Current query inherits the main query's filters, ordering and pagination. Related posts uses terms from the current post. Up to 100 public, unprotected posts are rendered per widget. Product post types are available when registered by WooCommerce; WooCommerce manages product visibility rules separately.
+Yes. Choose Dynamic query and Built-in card. Select a public post type, filters, limit, offset and order. Current query inherits the main query's filters, ordering and pagination. Related posts uses terms from the current post. Up to 100 public, unprotected posts are rendered per widget. Product post types are available when registered by WooCommerce; WooCommerce manages product visibility rules separately.
+
+= Can I loop over categories or brands themselves? =
+Yes. Select Dynamic query, then Query source > Categories / taxonomy terms. Choose the taxonomy, such as category, product_cat or your brand plugin's public taxonomy. Each slide represents a term with its name, description, archive link and thumbnail_id image when available. You can include/exclude term IDs, hide empty terms, restrict to a parent, set a limit/offset and sort by name, slug, ID, post count or included ID order. Leave Parent term ID empty for all levels, use 0 for top-level terms or a term ID for direct children. Up to 100 terms are rendered. For a Pro Loop Item, use Archive Title, Archive Description and Archive URL dynamic tags; post tags refer to posts. Developers can filter eew/term_query_args with arguments, widget and settings. The WP_Query-based Query ID hook applies to post sources only.
 
 = How do I use custom dynamic queries? =
 Enter a Query ID such as featured_items and attach a callback to elementor/query/featured_items. It receives the WP_Query and widget instances before the query runs. This supports meta queries, relationship-field IDs and custom filters. Developers can also filter eew/query_args with the query arguments, widget and resolved settings. Query ID does not automatically connect AJAX filters or pagination from a different Loop Grid widget.
@@ -81,6 +85,9 @@ Keep the plugin header, EEW_VERSION, Stable tag, package.json, package-lock.json
 Embla core and its five first-party plugins are pinned to 8.6.0 (MIT). Wheel Gestures is pinned to 8.0.2 (MIT); its UMD distribution includes wheel-gestures (MIT). See THIRD-PARTY.md, individual LICENSE files and assets/vendor/manifest.json for sources, versions and hashes.
 
 == Changelog ==
+
+= 1.3.0 =
+Added taxonomy term queries for categories, product categories, brands and other public taxonomies. Added term filters, ordering, hierarchy and empty-term controls, term cards with archive links and thumbnails, and per-term archive context for Loop Item templates.
 
 = 1.2.0 =
 Added the shared Sobelz update.json updater, Update URI header, plugin-details metadata and six-hour cache invalidation. Added release manifest and stable ZIP output with build-time version consistency checks.

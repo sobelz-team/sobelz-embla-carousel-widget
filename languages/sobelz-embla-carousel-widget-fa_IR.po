@@ -1,6 +1,6 @@
 # Persian translations for sobelz-embla-carousel-widget.
 msgid ""
-msgstr "Project-Id-Version: sobelz-embla-carousel-widget 1.2.0\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
+msgstr "Project-Id-Version: sobelz-embla-carousel-widget 1.3.0\nLanguage: fa_IR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "%1$d of %2$d"
 msgstr "%1$d از %2$d"
@@ -74,8 +74,8 @@ msgstr "عقب"
 msgid "Border radius"
 msgstr "گردی گوشه‌ها"
 
-msgid "Built-in post card"
-msgstr "کارت آمادهٔ نوشته"
+msgid "Built-in card"
+msgstr "کارت آماده"
 
 msgid "Button"
 msgstr "دکمه"
@@ -98,11 +98,14 @@ msgstr "عنوان دسترس‌پذیر کروسل"
 msgid "Carousel behavior"
 msgstr "رفتار کروسل"
 
+msgid "Categories / taxonomy terms"
+msgstr "دسته‌بندی‌ها / اصطلاح‌های تاکسونومی"
+
 msgid "Center"
 msgstr "وسط"
 
-msgid "Choose a published Loop Item from Templates → Theme Builder → Loop Item. Its dynamic tags use each query result as the current post. Requires Elementor Pro."
-msgstr "یک Loop Item منتشرشده از قالب‌ها ← پوسته‌ساز ← Loop Item انتخاب کنید. تگ‌های پویا برای هر نتیجه، دادهٔ همان پست را می‌گیرند. به Elementor Pro نیاز دارد."
+msgid "Choose a published Loop Item from Templates → Theme Builder → Loop Item. For taxonomy queries, use Archive Title, Archive Description and Archive URL dynamic tags. Requires Elementor Pro."
+msgstr "یک Loop Item منتشرشده از قالب‌ها ← پوسته‌ساز ← Loop Item انتخاب کنید. برای کوئری تاکسونومی از تگ‌های پویای عنوان آرشیو، توضیح آرشیو و لینک آرشیو استفاده کنید. به Elementor Pro نیاز دارد."
 
 msgid "Choose slide group"
 msgstr "انتخاب گروه اسلاید"
@@ -173,6 +176,9 @@ msgstr "حذف پست جاری از نتایج"
 msgid "Exclude post IDs"
 msgstr "شناسهٔ پست‌های مستثنا"
 
+msgid "Exclude term IDs"
+msgstr "شناسهٔ دسته‌ها / اصطلاح‌های مستثنا"
+
 msgid "Fade"
 msgstr "محو شدن (Fade)"
 
@@ -197,6 +203,9 @@ msgstr "کامل"
 msgid "Go to slide group %d"
 msgstr "رفتن به گروه اسلاید %d"
 
+msgid "Hide empty terms"
+msgstr "پنهان‌کردن دسته‌ها / اصطلاح‌های خالی"
+
 msgid "Horizontal"
 msgstr "افقی"
 
@@ -217,6 +226,9 @@ msgstr "ارتفاع تصویر"
 
 msgid "Image resolution"
 msgstr "وضوح تصویر"
+
+msgid "In taxonomy mode, loops over the terms themselves: post categories, product categories, brands or any public taxonomy. In post modes, filters posts by their terms."
+msgstr "در حالت تاکسونومی، روی خود دسته‌های مقالات، دسته‌های محصولات، برندها یا اصطلاح‌های هر تاکسونومی عمومی حلقه می‌زند. در حالت نوشته‌ها، پست‌ها را با اصطلاح‌های آن‌ها فیلتر می‌کند."
 
 msgid "In-view threshold"
 msgstr "آستانهٔ قابل مشاهده بودن"
@@ -254,6 +266,9 @@ msgstr "فاصلهٔ اتصال آخرین اسلاید به اولین"
 msgid "Layout"
 msgstr "چیدمان"
 
+msgid "Leave empty for all levels. Use 0 for top-level terms, or a term ID for its direct children."
+msgstr "برای همهٔ سطح‌ها خالی بگذارید. برای دسته‌های سطح اول 0 و برای زیرمجموعه‌های مستقیم، شناسهٔ دستهٔ والد را وارد کنید."
+
 msgid "Leave empty to use the slide gap. Set a value to customize the seam between the last and first slides, including in RTL and vertical layouts."
 msgstr "خالی بگذارید تا از فاصلهٔ اسلایدها پیروی کند. برای تنظیم جداگانهٔ فاصلهٔ اتصال آخرین اسلاید به اولین، مقدار وارد کنید. در RTL و حالت عمودی هم اعمال می‌شود."
 
@@ -280,6 +295,9 @@ msgstr "کشیدن با ماوس و لمس"
 
 msgid "Mouse drag threshold (px)"
 msgstr "آستانهٔ کشیدن ماوس (پیکسل)"
+
+msgid "Name"
+msgstr "نام"
 
 msgid "Navigation"
 msgstr "ناوبری"
@@ -311,11 +329,17 @@ msgstr "جهت ترتیب"
 msgid "Order by"
 msgstr "مرتب‌سازی بر اساس"
 
+msgid "Parent term ID"
+msgstr "شناسهٔ دسته / اصطلاح والد"
+
 msgid "Pause automatic rotation"
 msgstr "توقف پخش خودکار"
 
 msgid "Pause on hover"
 msgstr "توقف روی اشاره‌گر"
+
+msgid "Post count"
+msgstr "تعداد نوشته‌ها"
 
 msgid "Post type"
 msgstr "نوع نوشته"
@@ -425,6 +449,9 @@ msgstr "اسلاید در هر حرکت"
 msgid "Slides per view"
 msgstr "اسلاید قابل مشاهده"
 
+msgid "Slug"
+msgstr "نامک"
+
 msgid "Snap alignment"
 msgstr "تراز نقطهٔ توقف"
 
@@ -448,6 +475,9 @@ msgstr "طبقه‌بندی (Taxonomy)"
 
 msgid "Template"
 msgstr "قالب"
+
+msgid "Term ID"
+msgstr "شناسهٔ اصطلاح"
 
 msgid "Text alignment"
 msgstr "تراز متن"
@@ -478,9 +508,6 @@ msgstr "مدت جابه‌جایی"
 
 msgid "Transition effect"
 msgstr "افکت جابه‌جایی"
-
-msgid "Used for term filtering, or to find items sharing terms with the current post in Related mode."
-msgstr "برای فیلتر دسته‌ها و اصطلاح‌ها استفاده می‌شود. در حالت مرتبط، آیتم‌های دارای دسته یا اصطلاح مشترک با پست جاری را پیدا می‌کند."
 
 msgid "Vertical"
 msgstr "عمودی"

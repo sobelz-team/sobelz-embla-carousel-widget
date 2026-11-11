@@ -7,12 +7,16 @@ function eew_test_widget( array $settings ) {
 }
 
 function eew_test_render( $widget ) {
+	$buffer_level = ob_get_level();
 	ob_start();
 	try {
 		$widget->render_content();
 		return ob_get_contents();
 	} finally {
-		ob_end_clean();
+		// Elementor can leave an inner output buffer open when a widget throws.
+		while ( ob_get_level() > $buffer_level ) {
+			ob_end_clean();
+		}
 	}
 }
 
@@ -141,3 +145,4 @@ $pages['query'] = eew_page( 'Dynamic post carousel', array_merge( $query_setting
 $pages['query_hook'] = eew_page( 'Dynamic Query ID carousel', array_merge( $query_settings, [ 'query_id' => 'eew_featured' ] ) );
 $pages['loop_item'] = eew_page( 'Loop Item carousel', array_merge( $loop_settings, [ 'loop' => 'yes', 'slides_per_view' => 1, 'duration' => 0 ] ) );
 $query_test_result = [ 'events' => array_slice( $events, 0, 3 ), 'featured' => [ $events[0], $events[2], $events[4] ], 'pro' => defined( 'ELEMENTOR_PRO_VERSION' ) ? ELEMENTOR_PRO_VERSION : null ];
+require '/wordpress/wp-content/eew-term-tests.php';

@@ -24,7 +24,7 @@ final class Loop_Template {
 		}
 	}
 
-	public static function render( $document ) {
+	public static function render( $document, $item_id = null ) {
 		$id = $document->get_main_id();
 		if ( in_array( $id, self::$stack, true ) || count( self::$stack ) >= 3 ) {
 			return;
@@ -35,13 +35,13 @@ final class Loop_Template {
 		$elementor->editor->set_edit_mode( false );
 		$elementor->documents->switch_to_document( $document );
 		try {
-			// Loop CSS contains per-post dynamic values (e.g. backgrounds) and
+			// Loop CSS contains per-item dynamic values (e.g. backgrounds) and
 			// selectors. The generic saved-template renderer does not emit it.
 			$css_class = '\\ElementorPro\\Modules\\LoopBuilder\\Files\\Css\\Loop';
 			if ( class_exists( $css_class ) ) {
 				$css = $css_class::create( $id );
 				if ( is_callable( [ $css, 'print_all_css' ] ) ) {
-					$css->print_all_css( get_the_ID() );
+					$css->print_all_css( null === $item_id ? get_the_ID() : $item_id );
 				}
 			}
 			$document->print_content();
@@ -50,6 +50,15 @@ final class Loop_Template {
 			$elementor->editor->set_edit_mode( $editing );
 			array_pop( self::$stack );
 		}
+	}
+
+	/** Give archive dynamic tags each term without mutating the main query. */
+	public static function term_context( \WP_Term $term ) {
+		$query = new \WP_Query();
+		$query->parse_query( [ 'taxonomy' => $term->taxonomy, 'term' => $term->slug ] );
+		$query->queried_object = $term;
+		$query->queried_object_id = (int) $term->term_id;
+		$GLOBALS['wp_query'] = $query;
 	}
 
 	/** Preserve the containing loop, including WooCommerce and nested queries. */
