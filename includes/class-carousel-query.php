@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** WordPress post and term queries shared by cards and Elementor Pro Loop Items. */
 final class Carousel_Query {
 	const MAX_ITEMS = 100;
+	private static $displayed_posts = [];
+	private static $displayed_terms = [];
 
 	public static function post_types() {
 		$types = get_post_types( [ 'public' => true ], 'objects' );
@@ -37,8 +39,8 @@ final class Carousel_Query {
 			'number'     => self::integer( $settings, 'query_per_page', 6, 1, self::MAX_ITEMS ),
 			'offset'     => self::integer( $settings, 'query_offset', 0, 0, 10000 ),
 			'orderby'    => in_array( $settings['query_term_orderby'] ?? '', $allowed_orderby, true ) ? $settings['query_term_orderby'] : 'name',
-			'order'      => in_array( $settings['query_term_order'] ?? '', [ 'ASC', 'DESC' ], true ) ? $settings['query_term_order'] : 'ASC',
-			'hide_empty' => 'yes' === ( $settings['query_hide_empty'] ?? 'yes' ),
+			'order'      => in_array( $settings['query_term_order'] ?? '', [ 'ASC', 'DESC' ], true ) ? $settings['query_term_order'] : 'DESC',
+			'hide_empty' => 'yes' === ( $settings['query_hide_empty'] ?? '' ),
 			'fields'     => 'all',
 		];
 		$include = wp_parse_id_list( $settings['query_term_ids'] ?? '' );
@@ -58,23 +60,53 @@ final class Carousel_Query {
 	private static function run_terms( array $settings, $widget ) {
 		$query = new \WP_Term_Query();
 		$query->terms = [];
-		$args = apply_filters( 'eew/term_query_args', self::term_args( $settings ), $widget, $settings );
-		if ( ! is_array( $args ) ) {
+		$args = self::term_args( $settings );
+		if ( ! isset( self::taxonomies()[ $args['taxonomy'] ] ) ) {
 			return $query;
+		}
+		$native = Elementor_Query::terms( $settings, $widget, $args, $query );
+		if ( null !== $native ) {
+			return self::finish_terms( $native );
+		}
+		if ( 'yes' === ( $settings['query_avoid_duplicates'] ?? '' ) ) {
+			$args['exclude'] = array_merge( $args['exclude'] ?? [], self::$displayed_terms );
+		}
+		$args = self::validate_term_args( apply_filters( 'eew/term_query_args', $args, $widget, $settings ) );
+		if ( ! $args ) {
+			return $query;
+		}
+		$terms = $query->query( $args );
+		$query->terms = is_array( $terms ) ? array_values( $terms ) : [];
+		return self::finish_terms( $query );
+	}
+
+	private static function finish_terms( \WP_Term_Query $query ) {
+		$taxonomies = (array) ( $query->query_vars['taxonomy'] ?? [] );
+		$query->terms = array_slice( array_values( array_filter( (array) $query->terms, static function ( $term ) use ( $taxonomies ) {
+			return $term instanceof \WP_Term && in_array( $term->taxonomy, $taxonomies, true );
+		} ) ), 0, self::MAX_ITEMS );
+		self::$displayed_terms = array_unique( array_merge( self::$displayed_terms, wp_list_pluck( $query->terms, 'term_id' ) ) );
+		return $query;
+	}
+
+	/** Keep extension filters bounded and restricted to public taxonomy objects. */
+	public static function validate_term_args( $args ) {
+		if ( ! is_array( $args ) ) {
+			return null;
 		}
 		// An empty taxonomy would query every taxonomy, including internal ones.
 		$taxonomies = array_intersect( (array) ( $args['taxonomy'] ?? [] ), array_keys( self::taxonomies() ) );
 		if ( ! $taxonomies ) {
-			return $query;
+			return null;
 		}
 		$args['taxonomy'] = array_values( $taxonomies );
 		$args['number'] = self::integer( $args, 'number', 6, 1, self::MAX_ITEMS );
 		$args['fields'] = 'all';
-		$terms = $query->query( $args );
-		$query->terms = is_array( $terms ) ? array_slice( array_values( array_filter( $terms, static function ( $term ) use ( $taxonomies ) {
-			return $term instanceof \WP_Term && in_array( $term->taxonomy, $taxonomies, true );
-		} ) ), 0, self::MAX_ITEMS ) : [];
-		return $query;
+		$include = wp_parse_id_list( $args['include'] ?? [] );
+		if ( $include ) {
+			$args['include'] = array_values( array_diff( $include, wp_parse_id_list( $args['exclude'] ?? [] ) ) ) ?: [ 0 ];
+		}
+		return $args;
 	}
 
 	public static function args( array $settings ) {
@@ -148,7 +180,18 @@ final class Carousel_Query {
 		if ( 'terms' === self::source( $settings ) ) {
 			return self::run_terms( $settings, $widget );
 		}
-		$args = apply_filters( 'eew/query_args', self::args( $settings ), $widget, $settings );
+		$args = Elementor_Query::post_args( $settings, self::args( $settings ) );
+		if ( 'yes' === ( $settings['query_avoid_duplicates'] ?? '' ) && is_array( $args ) ) {
+			$displayed = self::$displayed_posts;
+			if ( class_exists( '\\ElementorPro\\Modules\\QueryControl\\Module' ) ) {
+				$displayed = array_merge( $displayed, \ElementorPro\Modules\QueryControl\Module::$displayed_ids );
+			}
+			$args['post__not_in'] = array_unique( array_merge( $args['post__not_in'] ?? [], $displayed ) );
+			if ( ! empty( $args['post__in'] ) ) {
+				$args['post__in'] = array_values( array_diff( $args['post__in'], $args['post__not_in'] ) ) ?: [ 0 ];
+			}
+		}
+		$args = apply_filters( 'eew/query_args', $args, $widget, $settings );
 		$query = new \WP_Query();
 		$id = preg_replace( '/[^a-zA-Z0-9_-]/', '', (string) ( $settings['query_id'] ?? '' ) );
 		$callback = static function ( $candidate ) use ( $query, $id, $widget ) {
@@ -170,12 +213,17 @@ final class Carousel_Query {
 		} finally {
 			remove_action( 'pre_get_posts', $callback );
 		}
+		if ( class_exists( '\\ElementorPro\\Modules\\QueryControl\\Module' ) ) {
+			\ElementorPro\Modules\QueryControl\Module::add_to_avoid_list( wp_list_pluck( $query->posts, 'ID' ) );
+			do_action( 'elementor/query/query_results', $query, $widget );
+		}
 		// Custom hooks can change post status. Public carousels only render
 		// public, unprotected posts, regardless of the viewer's login state.
 		$query->posts = array_values( array_filter( $query->posts, static function ( $post ) {
 			return $post instanceof \WP_Post && is_post_publicly_viewable( $post ) && '' === $post->post_password;
 		} ) );
 		$query->post_count = count( $query->posts );
+		self::$displayed_posts = array_unique( array_merge( self::$displayed_posts, wp_list_pluck( $query->posts, 'ID' ) ) );
 		$query->rewind_posts();
 		return $query;
 	}

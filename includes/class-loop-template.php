@@ -35,13 +35,26 @@ final class Loop_Template {
 		$elementor->editor->set_edit_mode( false );
 		$elementor->documents->switch_to_document( $document );
 		try {
-			// Loop CSS contains per-item dynamic values (e.g. backgrounds) and
-			// selectors. The generic saved-template renderer does not emit it.
+			// Static/custom CSS belongs to the template document. A term ID must
+			// never be looked up as a post/document ID here.
 			$css_class = '\\ElementorPro\\Modules\\LoopBuilder\\Files\\Css\\Loop';
 			if ( class_exists( $css_class ) ) {
 				$css = $css_class::create( $id );
+				// Pro discovers dynamic CSS elements while updating this metadata.
+				// Prepare it before the first item, just as the native loop skin does.
+				if ( '' === $css->get_meta( 'status' ) ) {
+					$css->update();
+				}
 				if ( is_callable( [ $css, 'print_all_css' ] ) ) {
-					$css->print_all_css( null === $item_id ? get_the_ID() : $item_id );
+					$css->print_all_css( $id );
+				}
+			}
+			$dynamic_class = '\\ElementorPro\\Modules\\LoopBuilder\\Files\\Css\\Loop_Dynamic_CSS';
+			if ( null !== $item_id && class_exists( $dynamic_class ) ) {
+				$dynamic = $dynamic_class::create( $item_id, $id );
+				$content = $dynamic->get_content();
+				if ( '' !== $content ) {
+					echo '<style id="' . esc_attr( 'eew-loop-dynamic-' . $id . '-' . $item_id ) . '">' . str_replace( '.elementor-' . $item_id, '.e-loop-item-' . $item_id, $content ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
 			}
 			$document->print_content();
@@ -58,6 +71,9 @@ final class Loop_Template {
 		$query->parse_query( [ 'taxonomy' => $term->taxonomy, 'term' => $term->slug ] );
 		$query->queried_object = $term;
 		$query->queried_object_id = (int) $term->term_id;
+		// Native Pro taxonomy widgets/tags use these fields, not archive flags.
+		$query->is_loop_taxonomy = true;
+		$query->loop_term = $term;
 		$GLOBALS['wp_query'] = $query;
 	}
 

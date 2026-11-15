@@ -28,6 +28,11 @@
    in its loop distance, preserving spacing across the loop seam. */
 .eew--loop.eew--x > .eew__viewport > .eew__container > .eew__slide:last-child { margin-inline-end: var(--eew-loop-gap, var(--eew-gap)); }
 .eew--loop.eew--y > .eew__viewport > .eew__container > .eew__slide:last-child { margin-block-end: var(--eew-loop-gap, var(--eew-gap)); }
+/* Each repeated data cycle has the same seam. The flex gap already supplies
+   ordinary spacing at internal boundaries, so add only the difference there. */
+.eew--loop.eew--x > .eew__viewport > .eew__container > .eew__slide[data-eew-loop-end]:not(:last-child) { margin-inline-end: calc(var(--eew-loop-gap, var(--eew-gap)) - var(--eew-gap)); }
+.eew--loop.eew--y > .eew__viewport > .eew__container > .eew__slide[data-eew-loop-end]:not(:last-child) { margin-block-end: calc(var(--eew-loop-gap, var(--eew-gap)) - var(--eew-gap)); }
+.eew__slide[data-eew-copy] .elementor-element-overlay { display: none !important; }
 .eew__slide > .e-loop-item { width: 100%; }
 .eew--y > .eew__viewport { height: var(--eew-height); }
 .eew--y > .eew__viewport > .eew__container { flex-direction: column; height: 100%; touch-action: pan-x pinch-zoom; }

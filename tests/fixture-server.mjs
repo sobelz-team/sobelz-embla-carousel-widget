@@ -10,15 +10,20 @@ const assets = Object.fromEntries(keys.map(key => {
 }));
 const labels = { goTo: 'Go to slide group %d', status: 'Slide group %1$d of %2$d', play: 'Start automatic rotation', pause: 'Pause automatic rotation', error: 'Carousel failed' };
 
-function carousel(mode, suffix = '', loopGap = null) {
+function carousel(mode, suffix = '', loopGap = null, params = new URLSearchParams()) {
   const options = { align: 'start', axis: ['vertical', 'loop-y'].includes(mode) ? 'y' : 'x', direction: ['rtl', 'loop-rtl'].includes(mode) ? 'rtl' : 'ltr', loop: mode === 'autoplay' || mode.startsWith('loop'), duration: 0, slidesToScroll: mode === 'grouped' ? 'auto' : 1 };
   const plugins = {};
+  const count = Math.max(0, Math.min(12, Number(params.get('slides') ?? 6)));
+  if (params.has('loop')) options.loop = true;
+  if (params.has('group')) options.slidesToScroll = params.get('group') === 'auto' ? 'auto' : Number(params.get('group'));
+  if (params.has('align')) options.align = params.get('align');
   if (mode === 'autoplay' || mode === 'editor') plugins.autoplay = { delay: 600, stopOnMouseEnter: true, stopOnInteraction: false, stopOnFocusIn: true };
   if (mode === 'vertical') plugins.autoScroll = { speed: 1, startDelay: 50, stopOnInteraction: false };
   if (mode === 'fade') Object.assign(plugins, { fade: {}, autoHeight: {}, classNames: {}, wheelGestures: {} });
+  if (params.get('motion') === 'auto-scroll') plugins.autoScroll = { speed: 1, startDelay: 0, stopOnInteraction: false };
   const config = { options, plugins, keyboard: true, respectReducedMotion: true, labels };
   const encoded = JSON.stringify(config).replace(/'/g, '&#39;');
-  const slides = Array.from({ length: 6 }, (_, i) => '<div class="eew__slide" role="group"><article class="eew__card"><div class="eew__placeholder">0' + (i + 1) + '</div><div class="eew__body"><h3 class="eew__title">Slide ' + (i + 1) + '</h3><p>Slide content</p><a href="#example">Example</a></div></article></div>').join('');
+  const slides = Array.from({ length: count }, (_, i) => '<div class="eew__slide" role="group" aria-label="' + (i + 1) + ' of ' + count + '"><article class="eew__card"><div class="eew__placeholder">0' + (i + 1) + '</div><div class="eew__body"><h3 class="eew__title">Slide ' + (i + 1) + '</h3><p>Slide content</p><a href="#example">Example</a>' + (params.has('rich') ? `<label for="field${suffix}${i}">Label ${i}</label><input id="field${suffix}${i}" value="Original ${i}"><button class="repeat-action" onclick="window.eewClicks=(window.eewClicks||0)+1;this.textContent='Clicked '+window.eewClicks">Action</button><svg width="10" height="10"><defs><linearGradient id="paint${suffix}${i}"><stop stop-color="blue"/></linearGradient></defs><rect width="10" height="10" fill="url(#paint${suffix}${i})"/></svg>` : '') + (params.has('nested') && i === 0 ? carousel('basic', 'nested' + suffix, null, new URLSearchParams('slides=2')) : '') + '</div></article></div>').join('');
   const style = loopGap === null ? '' : `style="--eew-loop-gap:${Math.max(0, Math.min(200, Number(loopGap)))}px"`;
   return `<div class="elementor-widget" id="widget${suffix}"><div class="eew eew--${options.axis} ${options.loop ? 'eew--loop' : ''} ${mode === 'fade' ? 'eew--fade eew--auto-height' : ''}" dir="${options.direction}" ${style} data-eew-config='${encoded}'>
     <div class="eew__viewport" id="vp${suffix}" tabindex="0"><div class="eew__container">${slides}</div></div>
@@ -34,7 +39,8 @@ http.createServer((request, response) => {
     const multiple = url.searchParams.has('multiple');
     const loopGap = url.searchParams.get('loop_gap');
     response.setHeader('Content-Type', 'text/html; charset=utf-8');
-    response.end(`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/css/carousel.css"><style>body{margin:40px;font-family:sans-serif}.eew{max-width:960px;margin:0 auto 40px}</style></head><body>${carousel(mode, '', loopGap)}${multiple ? carousel(mode, 'two', loopGap) : ''}
+    const layout = params => (params.has('view') ? '@media(min-width:1025px){.eew{--eew-per-view:' + Math.max(1, Math.min(12, Number(params.get('view')))) + '}}' : '') + (params.has('hidden') ? '.eew{display:none}' : '');
+    response.end(`<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="/assets/css/carousel.css"><style>body{margin:40px;font-family:sans-serif}.eew{max-width:960px;margin:0 auto 40px}${layout(url.searchParams)}</style></head><body>${carousel(mode, '', loopGap, url.searchParams)}${multiple ? carousel(mode, 'two', loopGap, url.searchParams) : ''}
       <script>window.EEWAssets=${JSON.stringify({ plugins: assets })};
       window.EEWTest={hooks:{},handlers:[]};
       window.elementorModules={frontend:{handlers:{Base:class { constructor(options){this.$element=options.$element;this.onInit()}onInit(){}onDestroy(){} }}}};

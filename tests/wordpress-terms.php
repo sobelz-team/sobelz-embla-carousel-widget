@@ -18,7 +18,7 @@ wp_set_object_terms( $events[2], [ $beta ], 'product_cat' );
 wp_set_object_terms( $events[3], [ $beta ], 'product_cat' );
 wp_set_object_terms( $events[0], [ $brand ], 'product_brand' );
 
-$term_settings = [ 'content_source' => 'query', 'query_source' => 'terms', 'query_taxonomy' => 'product_cat', 'query_per_page' => 20 ];
+$term_settings = [ 'content_source' => 'query', 'query_source' => 'terms', 'query_taxonomy' => 'product_cat', 'query_per_page' => 20, 'query_hide_empty' => 'yes', 'query_term_order' => 'ASC' ];
 $term_widget = eew_test_widget( $term_settings );
 $controls = $term_widget->get_controls();
 // Elementor strips editor-only labels/options from controls on the frontend.
@@ -31,6 +31,10 @@ eew_check( ! isset( $available_taxonomies['eew_secret'] ) && ! isset( $available
 eew_check( eew_term_ids( $term_settings, $term_widget ) === [ $child, $alpha, $beta ], 'Queries terms themselves by name and hides empty terms' );
 $all_terms = array_merge( $term_settings, [ 'query_hide_empty' => '' ] );
 eew_check( eew_term_ids( $all_terms, $term_widget ) === [ $child, $alpha, $beta, $empty_term ], 'Empty terms can be included' );
+$defaults = [ 'content_source' => 'query', 'query_source' => 'terms', 'query_taxonomy' => 'product_cat', 'query_per_page' => 20 ];
+eew_check( eew_term_ids( $defaults, $term_widget ) === [ $empty_term, $beta, $alpha, $child ], 'Native Loop Carousel defaults include empty terms and use descending names' );
+$empty_brand = wp_insert_term( 'Empty test brand', 'product_brand' )['term_id'];
+eew_check( in_array( $empty_brand, eew_term_ids( array_merge( $defaults, [ 'query_taxonomy' => 'product_brand' ] ), $term_widget ), true ), 'Brands without products are found with the default settings' );
 eew_check( eew_term_ids( array_merge( $all_terms, [ 'query_term_order' => 'DESC' ] ), $term_widget ) === [ $empty_term, $beta, $alpha, $child ], 'Descending term order' );
 eew_check( eew_term_ids( array_merge( $all_terms, [ 'query_offset' => 1, 'query_per_page' => 2 ] ), $term_widget ) === [ $alpha, $beta ], 'Term limit and offset' );
 $term_selection = array_merge( $all_terms, [ 'query_term_ids' => "$beta,$alpha,$child", 'query_exclude_term_ids' => (string) $alpha, 'query_term_orderby' => 'include' ] );
@@ -120,3 +124,11 @@ try {
 $pages['terms'] = eew_page( 'Product category carousel', array_merge( $term_settings, [ 'slides_per_view' => 1, 'duration' => 0 ] ) );
 $pages['term_loop'] = eew_page( 'Taxonomy Loop Item carousel', array_merge( $term_loop_settings, [ 'slides_per_view' => 1, 'duration' => 0 ] ) );
 $query_test_result['terms'] = [ $child, $alpha, $beta ];
+
+$duplicate_terms = [];
+for ( $i = 1; $i <= 3; $i++ ) {
+	$duplicate_terms[] = wp_insert_term( 'Z duplicate brand ' . $i, 'product_brand' )['term_id'];
+}
+$duplicate_settings = [ 'query_source' => 'terms', 'query_taxonomy' => 'product_brand', 'query_term_ids' => implode( ',', $duplicate_terms ), 'query_term_orderby' => 'include', 'query_term_order' => 'ASC', 'query_per_page' => 2 ];
+eew_check( eew_term_ids( $duplicate_settings, $term_widget ) === array_slice( $duplicate_terms, 0, 2 ), 'First term carousel records its displayed results' );
+eew_check( eew_term_ids( array_merge( $duplicate_settings, [ 'query_avoid_duplicates' => 'yes' ] ), $term_widget ) === [ $duplicate_terms[2] ], 'Following term carousel excludes displayed results even with included IDs' );

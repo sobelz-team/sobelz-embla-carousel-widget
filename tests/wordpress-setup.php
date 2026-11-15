@@ -54,6 +54,7 @@ $pages = [];
 $pages['plain'] = eew_page( 'Plain page' );
 $base = [ 'slides' => $slides, 'slides_per_view' => 2, 'duration' => 0, 'pause_on_hover' => '', 'stop_on_interaction' => '' ];
 $pages['basic'] = eew_page( 'Basic carousel', $base );
+$pages['loop_fill'] = eew_page( 'Underfilled manual loop', array_merge( $base, [ 'slides' => array_slice( $slides, 0, 3 ), 'slides_per_view' => 5, 'loop' => 'yes' ] ) );
 $pages['autoplay'] = eew_page( 'Autoplay carousel', array_merge( $base, [ 'motion' => 'autoplay', 'autoplay_delay' => 10000 ] ) );
 $pages['fade'] = eew_page( 'Fade carousel', array_merge( $base, [ 'effect' => 'fade', 'motion' => 'autoplay', 'autoplay_delay' => 10000, 'auto_height' => 'yes', 'class_names' => 'yes', 'wheel_gestures' => 'yes' ] ) );
 $pages['vertical'] = eew_page( 'Vertical carousel', array_merge( $base, [ 'axis' => 'y', 'direction' => 'rtl', 'motion' => 'auto_scroll', 'loop' => 'yes' ] ) );

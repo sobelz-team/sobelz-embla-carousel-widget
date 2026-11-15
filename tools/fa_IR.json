@@ -176,5 +176,7 @@
   "Select posts by ID": "انتخاب پست‌ها با شناسه",
   "Taxonomy": "طبقه‌بندی (Taxonomy)",
   "In taxonomy mode, loops over the terms themselves: post categories, product categories, brands or any public taxonomy. In post modes, filters posts by their terms.": "در حالت تاکسونومی، روی خود دسته‌های مقالات، دسته‌های محصولات، برندها یا اصطلاح‌های هر تاکسونومی عمومی حلقه می‌زند. در حالت نوشته‌ها، پست‌ها را با اصطلاح‌های آن‌ها فیلتر می‌کند.",
-  "Leave empty for all levels. Use 0 for top-level terms, or a term ID for its direct children.": "برای همهٔ سطح‌ها خالی بگذارید. برای دسته‌های سطح اول 0 و برای زیرمجموعه‌های مستقیم، شناسهٔ دستهٔ والد را وارد کنید."
+  "Leave empty for all levels. Use 0 for top-level terms, or a term ID for its direct children.": "برای همهٔ سطح‌ها خالی بگذارید. برای دسته‌های سطح اول 0 و برای زیرمجموعه‌های مستقیم، شناسهٔ دستهٔ والد را وارد کنید.",
+  "Avoid duplicates": "جلوگیری از نمایش تکراری",
+  "With the Scroll effect, short slide sets repeat automatically so the infinite loop can run.": "در حالت اسکرول، اگر آیتم‌ها برای حلقه کافی نباشند، نمایش آن‌ها خودکار تکرار می‌شود تا حلقهٔ بی‌نهایت کار کند."
 }

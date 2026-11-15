@@ -21,6 +21,7 @@ final class Plugin {
 
 		require_once EEW_PATH . 'includes/class-carousel-settings.php';
 		require_once EEW_PATH . 'includes/class-carousel-query.php';
+		require_once EEW_PATH . 'includes/class-elementor-query.php';
 		require_once EEW_PATH . 'includes/class-loop-template.php';
 		add_action( 'elementor/widgets/register', [ __CLASS__, 'register_widget' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'register_assets' ], 5 );

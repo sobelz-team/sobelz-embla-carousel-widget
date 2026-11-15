@@ -48,6 +48,9 @@ add_action( 'elementor/widgets/register', static function ( $manager ) {
 			if ( ! $term instanceof \WP_Term ) {
 				throw new \RuntimeException( 'Expected a term archive context' );
 			}
+			if ( empty( $GLOBALS['wp_query']->is_loop_taxonomy ) || $GLOBALS['wp_query']->loop_term !== $term ) {
+				throw new \RuntimeException( 'Expected native Elementor taxonomy loop context' );
+			}
 			if ( 'yes' === get_term_meta( $term->term_id, '_eew_throw', true ) ) {
 				throw new \RuntimeException( 'Expected term render exception' );
 			}

@@ -1,9 +1,24 @@
 node_modules/
 dist/
 test-results/
+playwright-report/
 .playground/
 *.log
 __pycache__/
+*.py[cod]
 .agents/
 .codex/
 .aws/
+.env
+.env.*
+.local/
+.DS_Store
+Thumbs.db
+
+# Temporary local container setup does not belong in the plugin repository.
+/compose*.yaml
+/compose*.yml
+/docker-compose*.yaml
+/docker-compose*.yml
+/Dockerfile*
+/docker/

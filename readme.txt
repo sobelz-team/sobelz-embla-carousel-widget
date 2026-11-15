@@ -4,7 +4,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: elementor
-Stable tag: 1.3.0
+Stable tag: 1.3.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,7 +35,7 @@ Carousel scripts are served locally. The updater checks release metadata at http
 == Installation ==
 
 1. Install and activate Elementor 3.20 or newer.
-2. Upload sobelz-embla-carousel-widget-1.3.0.zip in Plugins > Add New > Upload Plugin and activate it.
+2. Upload sobelz-embla-carousel-widget-1.3.2.zip in Plugins > Add New > Upload Plugin and activate it.
 3. Edit a page with Elementor and search for Sobelz Embla Carousel.
 4. Add slides, adjust Layout and Carousel behavior, and enable the Embla plugins you need.
 5. Publish the page. No npm install, build step, API key or CDN access is required on the WordPress server.
@@ -44,8 +44,8 @@ When replacing a previous installation named embla-elementor-widget, deactivate 
 
 == Frequently Asked Questions ==
 
-= Why is looping disabled with a few slides? =
-Embla turns looping off when there is not enough content to loop without visible gaps. Add more slides or reduce slides per view.
+= Can I loop with only a few items? =
+Yes. With Infinite loop and the Scroll effect, short sets repeat in the presentation layer to fill the viewport and allow looping. For example, three brands can fill five visible positions. Query results and original item counts are preserved; dots represent logical scroll groups. Copies adapt to layout changes, get unique IDs/references, stay outside the accessibility and Tab order, and mirror the original live widgets rather than initializing more controllers. Independent embedded media is not duplicated. Fade uses the original slides. The public Embla slideNodes() method includes physical presentation copies, identifiable by data-eew-copy.
 
 = Can Autoplay and Auto Scroll run together? =
 Select one automatic movement mode. Fade supports Autoplay, and shows one slide per view. Fade and continuous Auto Scroll cannot run together. Auto Height is available for horizontal carousels only.
@@ -60,10 +60,10 @@ Publish a template in Templates > Saved Templates, then select Saved Elementor t
 Publish a Loop Item in Templates > Theme Builder > Loop Item. In this widget select Content source > Dynamic query, choose Query item layout > Elementor Pro Loop Item and select the template. Then configure the Query section. The template supplies the design; WP_Query supplies the items. Dynamic title, image, permalink and other tags resolve for each result post. Pro must be active and support the Loop Item document type. Pro code is not bundled with this plugin.
 
 = Can I query items without Elementor Pro? =
-Yes. Choose Dynamic query and Built-in card. Select a public post type, filters, limit, offset and order. Current query inherits the main query's filters, ordering and pagination. Related posts uses terms from the current post. Up to 100 public, unprotected posts are rendered per widget. Product post types are available when registered by WooCommerce; WooCommerce manages product visibility rules separately.
+Yes. Choose Dynamic query and Built-in card. Select a public post type, filters, limit, offset and order. Current query inherits the main query's filters, ordering and pagination. Related posts uses terms from the current post. Up to 100 public, unprotected posts are rendered per widget. With Elementor Pro active, the installed native Loop Carousel query providers build post, product and taxonomy queries, including WooCommerce catalog visibility. Without Pro, the WordPress query fallback remains available; it does not implement every WooCommerce catalog rule.
 
 = Can I loop over categories or brands themselves? =
-Yes. Select Dynamic query, then Query source > Categories / taxonomy terms. Choose the taxonomy, such as category, product_cat or your brand plugin's public taxonomy. Each slide represents a term with its name, description, archive link and thumbnail_id image when available. You can include/exclude term IDs, hide empty terms, restrict to a parent, set a limit/offset and sort by name, slug, ID, post count or included ID order. Leave Parent term ID empty for all levels, use 0 for top-level terms or a term ID for direct children. Up to 100 terms are rendered. For a Pro Loop Item, use Archive Title, Archive Description and Archive URL dynamic tags; post tags refer to posts. Developers can filter eew/term_query_args with arguments, widget and settings. The WP_Query-based Query ID hook applies to post sources only.
+Yes. Select Dynamic query, then Query source > Categories / taxonomy terms. Choose the taxonomy, such as category, product_cat or your brand plugin's public taxonomy. Each slide represents a term with its name, description, archive link and thumbnail_id image when available. You can include/exclude term IDs, hide empty terms, restrict to a parent, set a limit/offset and sort by name, slug, ID, post count or included ID order. Leave Parent term ID empty for all levels, use 0 for top-level terms or a term ID for direct children. Up to 100 terms are rendered. Empty terms are included by default, with descending name order, matching the native Loop Carousel. Explicit Hide empty settings are respected. For a Pro Loop Item, native taxonomy tags, including WooCommerce Category Image for brand/category thumbnails, and archive title/description/URL tags resolve per term. Static/custom CSS belongs to the template, while dynamic CSS is generated separately per result. Developers can filter eew/term_query_args with arguments, widget and settings. The WP_Query-based Query ID hook applies to post sources only.
 
 = How do I use custom dynamic queries? =
 Enter a Query ID such as featured_items and attach a callback to elementor/query/featured_items. It receives the WP_Query and widget instances before the query runs. This supports meta queries, relationship-field IDs and custom filters. Developers can also filter eew/query_args with the query arguments, widget and resolved settings. Query ID does not automatically connect AJAX filters or pagination from a different Loop Grid widget.
@@ -85,6 +85,15 @@ Keep the plugin header, EEW_VERSION, Stable tag, package.json, package-lock.json
 Embla core and its five first-party plugins are pinned to 8.6.0 (MIT). Wheel Gestures is pinned to 8.0.2 (MIT); its UMD distribution includes wheel-gestures (MIT). See THIRD-PARTY.md, individual LICENSE files and assets/vendor/manifest.json for sources, versions and hashes.
 
 == Changelog ==
+
+= 1.3.2 =
+* Repeat underfilled scroll loops using bounded, responsive presentation copies without duplicating query results.
+* Preserve logical navigation, per-cycle seam spacing, original widget state, unique references and accessibility; clean up copies and observers on destruction.
+
+= 1.3.1 =
+* Use the installed Elementor Pro Loop Carousel query providers for posts, products and taxonomies, retaining the Free fallback and scoped Query ID hooks.
+* Match native empty-term and ordering defaults, and share duplicate avoidance with native loops.
+* Supply the native taxonomy/product loop context and per-item dynamic CSS. Prepare CSS metadata before the first item and resolve template custom CSS by template ID.
 
 = 1.3.0 =
 Added taxonomy term queries for categories, product categories, brands and other public taxonomies. Added term filters, ordering, hierarchy and empty-term controls, term cards with archive links and thumbnails, and per-term archive context for Loop Item templates.

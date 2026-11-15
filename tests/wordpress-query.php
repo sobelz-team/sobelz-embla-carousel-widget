@@ -144,5 +144,14 @@ eew_check( false !== strpos( $empty, 'Empty query result' ) && false === strpos(
 $pages['query'] = eew_page( 'Dynamic post carousel', array_merge( $query_settings, [ 'loop' => 'yes', 'slides_per_view' => 1, 'duration' => 0 ] ) );
 $pages['query_hook'] = eew_page( 'Dynamic Query ID carousel', array_merge( $query_settings, [ 'query_id' => 'eew_featured' ] ) );
 $pages['loop_item'] = eew_page( 'Loop Item carousel', array_merge( $loop_settings, [ 'loop' => 'yes', 'slides_per_view' => 1, 'duration' => 0 ] ) );
+$pages['query_loop_fill'] = eew_page( 'Underfilled query Loop Items', array_merge( $loop_settings, [ 'loop' => 'yes', 'slides_per_view' => 5, 'duration' => 0 ] ) );
 $query_test_result = [ 'events' => array_slice( $events, 0, 3 ), 'featured' => [ $events[0], $events[2], $events[4] ], 'pro' => defined( 'ELEMENTOR_PRO_VERSION' ) ? ELEMENTOR_PRO_VERSION : null ];
 require '/wordpress/wp-content/eew-term-tests.php';
+
+$duplicate_posts = [];
+for ( $i = 1; $i <= 3; $i++ ) {
+	$duplicate_posts[] = wp_insert_post( [ 'post_type' => 'eew_event', 'post_status' => 'publish', 'post_title' => 'Z duplicate test ' . $i ] );
+}
+$duplicate_settings = array_merge( $query_settings, [ 'query_include_ids' => implode( ',', $duplicate_posts ), 'query_per_page' => 2 ] );
+eew_check( eew_result_ids( \EEW\Carousel_Query::run( $duplicate_settings, $widget ) ) === array_slice( $duplicate_posts, 0, 2 ), 'First post carousel records its displayed results' );
+eew_check( eew_result_ids( \EEW\Carousel_Query::run( array_merge( $duplicate_settings, [ 'query_avoid_duplicates' => 'yes' ] ), $widget ) ) === [ $duplicate_posts[2] ], 'Following post carousel excludes displayed results even with included IDs' );

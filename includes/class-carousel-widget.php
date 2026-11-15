@@ -173,7 +173,7 @@ final class Carousel_Widget extends Widget_Base {
 			'term_id' => __( 'Term ID', 'sobelz-embla-carousel-widget' ), 'count' => __( 'Post count', 'sobelz-embla-carousel-widget' ),
 			'include' => __( 'Included ID order', 'sobelz-embla-carousel-widget' ),
 		], 'name', [ 'condition' => [ 'query_source' => 'terms' ] ] );
-		$this->select_control( 'query_term_order', __( 'Order', 'sobelz-embla-carousel-widget' ), [ 'ASC' => __( 'Ascending', 'sobelz-embla-carousel-widget' ), 'DESC' => __( 'Descending', 'sobelz-embla-carousel-widget' ) ], 'ASC', [ 'condition' => [ 'query_source' => 'terms' ] ] );
+		$this->select_control( 'query_term_order', __( 'Order', 'sobelz-embla-carousel-widget' ), [ 'ASC' => __( 'Ascending', 'sobelz-embla-carousel-widget' ), 'DESC' => __( 'Descending', 'sobelz-embla-carousel-widget' ) ], 'DESC', [ 'condition' => [ 'query_source' => 'terms' ] ] );
 		$taxonomies = [ '' => __( 'None', 'sobelz-embla-carousel-widget' ) ];
 		foreach ( Carousel_Query::taxonomies() as $name => $taxonomy ) {
 			$taxonomies[ $name ] = $taxonomy->labels->name . ' (' . $name . ')';
@@ -182,7 +182,8 @@ final class Carousel_Widget extends Widget_Base {
 			'condition' => [ 'query_source!' => 'current' ],
 			'description' => __( 'In taxonomy mode, loops over the terms themselves: post categories, product categories, brands or any public taxonomy. In post modes, filters posts by their terms.', 'sobelz-embla-carousel-widget' ),
 		] );
-		$this->toggle( 'query_hide_empty', __( 'Hide empty terms', 'sobelz-embla-carousel-widget' ), true, [ 'condition' => [ 'query_source' => 'terms' ] ] );
+		$this->toggle( 'query_hide_empty', __( 'Hide empty terms', 'sobelz-embla-carousel-widget' ), false, [ 'condition' => [ 'query_source' => 'terms' ] ] );
+		$this->toggle( 'query_avoid_duplicates', __( 'Avoid duplicates', 'sobelz-embla-carousel-widget' ), false, [ 'condition' => [ 'query_source' => [ 'posts', 'terms' ] ] ] );
 		$this->add_control( 'query_term_parent', [
 			'label' => __( 'Parent term ID', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::NUMBER, 'min' => 0, 'default' => '',
 			'condition' => [ 'query_source' => 'terms' ],
@@ -247,7 +248,7 @@ final class Carousel_Widget extends Widget_Base {
 
 	private function behavior_controls() {
 		$this->start_controls_section( 'section_behavior', [ 'label' => __( 'Carousel behavior', 'sobelz-embla-carousel-widget' ) ] );
-		$this->toggle( 'loop', __( 'Infinite loop', 'sobelz-embla-carousel-widget' ), false, [ 'description' => __( 'Embla disables looping automatically when there are too few slides to loop without gaps.', 'sobelz-embla-carousel-widget' ) ] );
+		$this->toggle( 'loop', __( 'Infinite loop', 'sobelz-embla-carousel-widget' ), false, [ 'description' => __( 'With the Scroll effect, short slide sets repeat automatically so the infinite loop can run.', 'sobelz-embla-carousel-widget' ) ] );
 		$this->toggle( 'draggable', __( 'Mouse and touch dragging', 'sobelz-embla-carousel-widget' ), true );
 		$this->toggle( 'drag_free', __( 'Free dragging', 'sobelz-embla-carousel-widget' ), false, [ 'condition' => [ 'effect' => 'scroll', 'draggable' => 'yes' ] ] );
 		$this->toggle( 'skip_snaps', __( 'Skip snaps on vigorous dragging', 'sobelz-embla-carousel-widget' ), false, [ 'condition' => [ 'draggable' => 'yes', 'drag_free!' => 'yes' ] ] );
@@ -432,6 +433,7 @@ final class Carousel_Widget extends Widget_Base {
 						$item['link'] = [ 'url' => is_wp_error( $link ) ? '' : $link ];
 					}
 				} elseif ( $query instanceof \WP_Query ) {
+					$query->is_loop_product = 'product' === get_post_type( $item );
 					$query->the_post();
 					$post_id = get_the_ID();
 					$item = [

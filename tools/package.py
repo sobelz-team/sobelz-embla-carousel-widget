@@ -9,7 +9,7 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SLUG = "sobelz-embla-carousel-widget"
-RUNTIME = ["sobelz-embla-carousel-widget.php", "includes", "assets", "languages", "readme.txt", "README.fa.md", "LICENSE", "THIRD-PARTY.md"]
+RUNTIME = ["sobelz-embla-carousel-widget.php", "includes", "assets", "languages", "readme.txt", "LICENSE", "THIRD-PARTY.md"]
 
 
 def main():

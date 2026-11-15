@@ -6,9 +6,10 @@ import { chromium } from '@playwright/test';
 
 const root = path.resolve(import.meta.dirname, '..');
 const mounts = [{ hostPath: path.join(root, 'dist/sobelz-embla-carousel-widget'), vfsPath: '/wordpress/wp-content/plugins/sobelz-embla-carousel-widget' }];
+if (process.env.EEW_ELEMENTOR_DIR) mounts.push({ hostPath: path.resolve(process.env.EEW_ELEMENTOR_DIR), vfsPath: '/wordpress/wp-content/plugins/elementor' });
 if (process.env.EEW_ELEMENTOR_PRO_DIR) mounts.push({ hostPath: path.resolve(process.env.EEW_ELEMENTOR_PRO_DIR), vfsPath: '/wordpress/wp-content/plugins/elementor-pro' });
 const steps = [
-  { step: 'installPlugin', pluginData: { resource: 'url', url: 'https://downloads.wordpress.org/plugin/elementor.latest-stable.zip' }, options: { activate: true } },
+  ...(process.env.EEW_ELEMENTOR_DIR ? [{ step: 'activatePlugin', pluginPath: 'elementor/elementor.php' }] : [{ step: 'installPlugin', pluginData: { resource: 'url', url: 'https://downloads.wordpress.org/plugin/elementor.latest-stable.zip' }, options: { activate: true } }]),
   ...(process.env.EEW_ELEMENTOR_PRO_DIR ? [{ step: 'activatePlugin', pluginPath: 'elementor-pro/elementor-pro.php' }] : []),
   { step: 'activatePlugin', pluginPath: 'sobelz-embla-carousel-widget/sobelz-embla-carousel-widget.php' },
   { step: 'writeFile', path: '/wordpress/wp-content/mu-plugins/eew-test-fixtures.php', data: readFileSync(path.join(root, 'tests/wordpress-fixtures.php'), 'utf8') },
@@ -43,7 +44,7 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   const requests = [];
   page.on('request', request => { if (request.url().includes('/assets/vendor/')) requests.push(request.url()); });
-  for (const name of ['plain', 'basic', 'autoplay', 'fade', 'vertical', 'template', 'query', 'query_hook', 'loop_item', 'terms', 'term_loop']) {
+  for (const name of ['plain', 'basic', 'loop_fill', 'autoplay', 'fade', 'vertical', 'template', 'query', 'query_hook', 'loop_item', 'query_loop_fill', 'terms', 'term_loop']) {
     console.log('Checking WordPress page:', name);
     requests.length = 0;
     await page.goto(server.serverUrl + '/?page_id=' + setup.pages[name], { waitUntil: 'networkidle' });
@@ -64,6 +65,30 @@ try {
     }));
     assert.ok(data.snaps >= 1);
     assert.ok(requests.every(url => new URL(url).origin === new URL(server.serverUrl).origin));
+    if (name === 'loop_fill' || name === 'query_loop_fill') {
+      const loop = await page.locator('.eew').evaluate(root => ({
+        active: root.emblaApi.internalEngine().options.loop,
+        original: root.querySelectorAll('.eew__container > .eew__slide:not([data-eew-copy])').length,
+        copies: root.querySelectorAll('.eew__container > [data-eew-copy]').length,
+        dots: root.querySelectorAll('.eew__dot').length,
+        controllers: root.querySelectorAll('[data-eew-copy] .elementor, [data-eew-copy] [data-element_type]').length,
+      }));
+      assert.equal(loop.active, true);
+      assert.equal(loop.original, 3);
+      assert.ok(loop.copies > 0);
+      assert.equal(loop.dots, 3);
+      assert.equal(loop.controllers, 0, 'Presentation copies do not bootstrap more Elementor documents/widgets');
+      if (name === 'query_loop_fill') {
+        const ids = await page.locator('.eew__slide[data-post-id]').evaluateAll(nodes => nodes.map(node => Number(node.dataset.postId)));
+        assert.deepEqual(ids, setup.queries.events, 'Query results are not duplicated');
+      }
+      await page.locator('.eew__next').click();
+      assert.equal(await page.locator('.eew__dot[aria-current]').evaluate(node => Array.from(node.parentNode.children).indexOf(node)), 1);
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.waitForFunction(() => document.querySelectorAll('.eew__container > [data-eew-copy]').length === 0);
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.waitForFunction(() => document.querySelectorAll('.eew__container > [data-eew-copy]').length > 0);
+    }
     if (name === 'basic') {
       assert.deepEqual(data.plugins, []);
       assert.equal(requests.length, 1, 'Only core loads for a basic widget');
