@@ -4,7 +4,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: elementor
-Stable tag: 1.3.2
+Stable tag: 1.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ A responsive Elementor carousel using locally bundled Embla 8.6.0 and conditiona
 
 Add the Sobelz Embla Carousel widget from Elementor's General category. Elementor Free 3.20+ is required; Pro is optional.
 
-* Image/text/button slides or published saved Elementor templates.
+* Image-only slides, image/text/button slides, or published saved Elementor templates.
 * Dynamic WordPress queries with post types, terms, authors, included/excluded IDs, offset and ordering.
 * Taxonomy term loops for blog categories, product categories, brands and other public taxonomies, with term cards or Loop Items.
 * Elementor Pro Loop Item templates rendered once per query result, with each post's dynamic context.
@@ -35,7 +35,7 @@ Carousel scripts are served locally. The updater checks release metadata at http
 == Installation ==
 
 1. Install and activate Elementor 3.20 or newer.
-2. Upload sobelz-embla-carousel-widget-1.3.2.zip in Plugins > Add New > Upload Plugin and activate it.
+2. Upload sobelz-embla-carousel-widget-1.4.0.zip in Plugins > Add New > Upload Plugin and activate it.
 3. Edit a page with Elementor and search for Sobelz Embla Carousel.
 4. Add slides, adjust Layout and Carousel behavior, and enable the Embla plugins you need.
 5. Publish the page. No npm install, build step, API key or CDN access is required on the WordPress server.
@@ -85,6 +85,9 @@ Keep the plugin header, EEW_VERSION, Stable tag, package.json, package-lock.json
 Embla core and its five first-party plugins are pinned to 8.6.0 (MIT). Wheel Gestures is pinned to 8.0.2 (MIT); its UMD distribution includes wheel-gestures (MIT). See THIRD-PARTY.md, individual LICENSE files and assets/vendor/manifest.json for sources, versions and hashes.
 
 == Changelog ==
+
+= 1.4.0 =
+* Add an Image only content type for manual slides. The image sits directly inside the slide and uses its original aspect ratio by default.
 
 = 1.3.2 =
 * Repeat underfilled scroll loops using bounded, responsive presentation copies without duplicating query results.

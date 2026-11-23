@@ -3,7 +3,6 @@
   --eew-gap: 20px;
   --eew-loop-gap: initial;
   --eew-height: 600px;
-  --eew-image-height: 220px;
   --eew-nav-color: #1e293b;
   --eew-nav-bg: #f1f5f9;
   --eew-dot-color: #cbd5e1;
@@ -42,11 +41,12 @@
 .eew--fade > .eew__viewport > .eew__container > .eew__slide { flex-basis: 100%; }
 .eew__card { height: 100%; overflow: hidden; border-radius: 16px; background: #f8fafc; }
 .eew--auto-height > .eew__viewport > .eew__container > .eew__slide > .eew__card { height: auto; }
-.eew .eew__image { display: block; width: 100%; height: var(--eew-image-height); object-fit: cover; border: 0; border-radius: 0; }
+.eew .eew__image { display: block; width: 100%; height: var(--eew-image-height, auto); object-fit: cover; }
+.eew .eew__card > .eew__image { height: var(--eew-image-height, 220px); border: 0; border-radius: 0; }
 .eew__placeholder {
   display: grid;
   place-items: center;
-  height: var(--eew-image-height);
+  height: var(--eew-image-height, 220px);
   background: linear-gradient(135deg, #e0e7ff, #ede9fe);
   color: #6366f1;
   font-size: 64px;

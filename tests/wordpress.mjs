@@ -44,7 +44,7 @@ try {
   page.on('pageerror', error => errors.push(error.message));
   const requests = [];
   page.on('request', request => { if (request.url().includes('/assets/vendor/')) requests.push(request.url()); });
-  for (const name of ['plain', 'basic', 'loop_fill', 'autoplay', 'fade', 'vertical', 'template', 'query', 'query_hook', 'loop_item', 'query_loop_fill', 'terms', 'term_loop']) {
+  for (const name of ['plain', 'basic', 'image_only', 'loop_fill', 'autoplay', 'fade', 'vertical', 'template', 'query', 'query_hook', 'loop_item', 'query_loop_fill', 'terms', 'term_loop']) {
     console.log('Checking WordPress page:', name);
     requests.length = 0;
     await page.goto(server.serverUrl + '/?page_id=' + setup.pages[name], { waitUntil: 'networkidle' });
@@ -94,6 +94,24 @@ try {
       assert.equal(requests.length, 1, 'Only core loads for a basic widget');
       await page.locator('.eew__next').click();
       assert.equal(await page.locator('.eew').evaluate(root => root.emblaApi.selectedScrollSnap()), 1);
+    }
+    if (name === 'image_only') {
+      const slides = page.locator('.eew__container > .eew__slide');
+      for (const index of [0, 1]) {
+        assert.deepEqual(await slides.nth(index).locator(':scope > *').evaluateAll(nodes => nodes.map(node => node.tagName)), ['IMG']);
+        assert.ok((await slides.nth(index).getAttribute('aria-label')).endsWith(`Slide ${index + 1}`));
+      }
+      const image = slides.nth(0).locator('img');
+      assert.equal(await image.getAttribute('alt'), 'Image from the media library');
+      assert.equal(await image.getAttribute('loading'), 'eager');
+      assert.equal(await slides.nth(1).locator('img').getAttribute('loading'), 'lazy');
+      assert.equal(await image.evaluate(async node => {
+        await node.decode();
+        const { width, height } = node.getBoundingClientRect();
+        return height === width && getComputedStyle(node).objectFit === 'contain';
+      }), true, 'Image follows its aspect ratio and the selected fit');
+      assert.equal(await slides.nth(2).locator('.eew__body').count(), 1, 'Legacy item still renders as a card');
+      assert.equal(await slides.nth(2).locator('img').evaluate(node => getComputedStyle(node).height), '220px');
     }
     if (name === 'autoplay') {
       assert.deepEqual(data.plugins, ['autoplay']);

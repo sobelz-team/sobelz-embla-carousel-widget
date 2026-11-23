@@ -54,6 +54,20 @@ $pages = [];
 $pages['plain'] = eew_page( 'Plain page' );
 $base = [ 'slides' => $slides, 'slides_per_view' => 2, 'duration' => 0, 'pause_on_hover' => '', 'stop_on_interaction' => '' ];
 $pages['basic'] = eew_page( 'Basic carousel', $base );
+$upload = wp_upload_bits( 'slide-image.png', null, base64_decode( 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=' ) );
+eew_check( ! $upload['error'], 'Slide image uploaded' );
+$image_id = wp_insert_attachment( [ 'post_title' => 'Slide image', 'post_mime_type' => 'image/png' ], $upload['file'], 0, true );
+eew_check( ! is_wp_error( $image_id ), 'Slide image added to the media library' );
+wp_update_attachment_metadata( $image_id, [ 'width' => 1, 'height' => 1 ] );
+update_post_meta( $image_id, '_wp_attachment_image_alt', 'Image from the media library' );
+$image_slides = $slides;
+$image_slides[0]['content_type'] = 'image';
+$image_slides[0]['image'] = [ 'id' => $image_id ];
+$image_slides[1]['content_type'] = 'image';
+$image_slides[1]['image'] = [ 'url' => $upload['url'] ];
+unset( $image_slides[2]['content_type'] );
+$image_slides[2]['image'] = [ 'id' => $image_id ];
+$pages['image_only'] = eew_page( 'Mixed slide types', array_merge( $base, [ 'slides' => array_slice( $image_slides, 0, 3 ), 'image_fit' => 'contain' ] ) );
 $pages['loop_fill'] = eew_page( 'Underfilled manual loop', array_merge( $base, [ 'slides' => array_slice( $slides, 0, 3 ), 'slides_per_view' => 5, 'loop' => 'yes' ] ) );
 $pages['autoplay'] = eew_page( 'Autoplay carousel', array_merge( $base, [ 'motion' => 'autoplay', 'autoplay_delay' => 10000 ] ) );
 $pages['fade'] = eew_page( 'Fade carousel', array_merge( $base, [ 'effect' => 'fade', 'motion' => 'autoplay', 'autoplay_delay' => 10000, 'auto_height' => 'yes', 'class_names' => 'yes', 'wheel_gestures' => 'yes' ] ) );
@@ -69,6 +83,7 @@ require '/wordpress/wp-content/eew-query-tests.php';
 // Verify the Persian binary catalog without relying on a remote language pack.
 load_textdomain( 'sobelz-embla-carousel-widget', EEW_PATH . 'languages/sobelz-embla-carousel-widget-fa_IR.mo' );
 eew_check( __( 'Slides', 'sobelz-embla-carousel-widget' ) === 'اسلایدها', 'Persian translations load' );
+eew_check( __( 'Image only', 'sobelz-embla-carousel-widget' ) === 'فقط تصویر', 'Image-only option is translated' );
 unload_textdomain( 'sobelz-embla-carousel-widget' );
 
 echo wp_json_encode( [ 'ok' => true, 'pages' => $pages, 'queries' => $query_test_result, 'wordpress' => $GLOBALS['wp_version'], 'elementor' => ELEMENTOR_VERSION, 'php' => PHP_VERSION ] );

@@ -93,7 +93,11 @@ final class Carousel_Widget extends Widget_Base {
 		$repeater->add_control( 'content_type', [
 			'label' => __( 'Content type', 'sobelz-embla-carousel-widget' ),
 			'type' => Controls_Manager::SELECT, 'default' => 'card',
-			'options' => [ 'card' => __( 'Image and text', 'sobelz-embla-carousel-widget' ), 'template' => __( 'Saved Elementor template', 'sobelz-embla-carousel-widget' ) ],
+			'options' => [
+				'card' => __( 'Image and text', 'sobelz-embla-carousel-widget' ),
+				'image' => __( 'Image only', 'sobelz-embla-carousel-widget' ),
+				'template' => __( 'Saved Elementor template', 'sobelz-embla-carousel-widget' ),
+			],
 		] );
 		$repeater->add_control( 'title', [
 			'label' => __( 'Title', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::TEXT,
@@ -101,7 +105,7 @@ final class Carousel_Widget extends Widget_Base {
 		] );
 		$repeater->add_control( 'image', [
 			'label' => __( 'Image', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::MEDIA,
-			'dynamic' => [ 'active' => true ], 'condition' => [ 'content_type' => 'card' ],
+			'dynamic' => [ 'active' => true ], 'condition' => [ 'content_type' => [ 'card', 'image' ] ],
 		] );
 		$repeater->add_control( 'description', [
 			'label' => __( 'Description', 'sobelz-embla-carousel-widget' ), 'type' => Controls_Manager::TEXTAREA,
@@ -469,17 +473,21 @@ final class Carousel_Widget extends Widget_Base {
 	}
 
 	private function render_slide( $slide, $settings, $index ) {
-		if ( 'template' === ( $slide['content_type'] ?? 'card' ) ) {
+		$type = $slide['content_type'] ?? 'card';
+		if ( 'template' === $type ) {
 			$this->render_template( absint( $slide['template_id'] ?? 0 ) );
+			return;
+		}
+		$image = $this->slide_image( $slide['image'] ?? [], $settings['image_size'] ?? 'large', $index );
+		if ( 'image' === $type ) {
+			echo $image;
 			return;
 		}
 		$tag = in_array( $settings['title_tag'] ?? '', [ 'h2', 'h3', 'h4', 'h5', 'h6', 'div' ], true ) ? $settings['title_tag'] : 'h3';
 		?>
 		<article class="eew__card">
-			<?php if ( ! empty( $slide['image']['id'] ) ) : ?>
-				<?php echo wp_get_attachment_image( absint( $slide['image']['id'] ), $settings['image_size'] ?? 'large', false, [ 'class' => 'eew__image', 'loading' => 0 === $index ? 'eager' : 'lazy', 'draggable' => 'false' ] ); ?>
-			<?php elseif ( ! empty( $slide['image']['url'] ) ) : ?>
-				<img class="eew__image" src="<?php echo esc_url( $slide['image']['url'] ); ?>" alt="" loading="<?php echo 0 === $index ? 'eager' : 'lazy'; ?>" draggable="false">
+			<?php if ( '' !== $image ) : ?>
+				<?php echo $image; ?>
 			<?php else : ?>
 				<div class="eew__placeholder" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $index + 1 ), 2, '0', STR_PAD_LEFT ) ); ?></div>
 			<?php endif; ?>
@@ -497,6 +505,18 @@ final class Carousel_Widget extends Widget_Base {
 			</div>
 		</article>
 		<?php
+	}
+
+	private function slide_image( $image, $size, $index ) {
+		$loading = 0 === $index ? 'eager' : 'lazy';
+		if ( ! empty( $image['id'] ) ) {
+			$html = wp_get_attachment_image( absint( $image['id'] ), $size, false, [ 'class' => 'eew__image', 'loading' => $loading, 'draggable' => 'false' ] );
+			if ( $html ) {
+				return $html;
+			}
+		}
+		$url = esc_url( $image['url'] ?? '' );
+		return '' === $url ? '' : sprintf( '<img class="eew__image" src="%s" alt="" loading="%s" draggable="false">', $url, $loading );
 	}
 
 	private function render_template( $template_id ) {
